@@ -1,0 +1,1646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="description" content="Confidential build reference. Not for public distribution.">
+<title>Balaji Wafers · Potato Value Chain — MAMSYS build reference</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --soil:#121B17;          /* ink */
+  --soil-70:#3A4741;
+  --soil-45:#6B776F;
+  --frost:#E7EBE8;         /* page */
+  --card:#FFFFFF;
+  --line:#D2D9D4;
+  --line-soft:#E6EAE7;
+  --mesh:#DC4A1E;          /* leno-bag mesh orange — MAMSYS scope */
+  --mesh-soft:#FDEDE7;
+  --steel:#1F5F72;         /* cold chain / Cropin upstream */
+  --steel-soft:#E6EFF2;
+  --chip:#E8B33C;          /* potato-chip gold */
+  --moss:#2F6B4A;
+  --moss-soft:#E7F1EB;
+  --alert:#B22D1E;
+  --alert-soft:#FBE9E6;
+  --warn:#8A6410;
+  --warn-soft:#FBF2DE;
+  --r:3px;
+  --disp:'Archivo',system-ui,sans-serif;
+  --body:'IBM Plex Sans',system-ui,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--frost);color:var(--soil);
+  font-family:var(--body);font-size:13.5px;line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{font-family:var(--disp);margin:0;letter-spacing:-0.015em}
+a{color:var(--steel)}
+button{font-family:inherit;font-size:inherit}
+.mono{font-family:var(--mono)}
+.wrap{max-width:1480px;margin:0 auto;padding:0 22px}
+
+/* ---------- masthead ---------- */
+.mast{background:var(--soil);color:#EDF1EE;padding:14px 0 0}
+.mast-top{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.brand{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.brand h1{font-size:19px;font-weight:700;color:#fff;letter-spacing:-0.02em}
+.brand .sub{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#8FA096}
+.mast-meta{display:flex;gap:0;font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:#8FA096;flex-wrap:wrap}
+.mast-meta span{padding:0 12px;border-left:1px solid #2C382F}
+.mast-meta span:first-child{border-left:0}
+.mast-meta b{color:#DDE4DF;font-weight:500}
+
+/* ---------- crop-cycle rail (signature) ---------- */
+.rail-scroll{overflow-x:auto;margin-top:14px;padding-bottom:2px;scrollbar-width:thin}
+.rail{display:flex;min-width:1180px;position:relative;padding-top:26px}
+.rail::before{ /* Cropin hairline track */
+  content:'';position:absolute;left:0;right:0;top:31px;height:1px;background:#3E4C44;
+}
+.rail-node{
+  flex:1 1 0;position:relative;background:none;border:0;padding:0 6px 13px;
+  text-align:left;color:#8FA096;cursor:pointer;min-width:96px;
+}
+.rail-node .tick{
+  position:absolute;top:-21px;left:6px;right:6px;height:11px;display:flex;align-items:center;
+}
+.rail-node .tick::after{content:'';height:1px;flex:1;background:transparent}
+.rail-node .dot{width:9px;height:9px;border-radius:50%;background:var(--soil);border:1.5px solid #6D7C73;flex:0 0 auto}
+.rail-node.own .dot{background:var(--mesh);border-color:var(--mesh);width:11px;height:11px}
+.rail-node.own .tick::after{background:var(--mesh);height:3px}
+.rail-node.own{color:#F2C8B8}
+.rail-node .num{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;display:block;opacity:.8}
+.rail-node .nm{display:block;font-size:11.5px;line-height:1.25;font-weight:500;margin-top:2px}
+.rail-node .dap{font-family:var(--mono);font-size:9px;letter-spacing:.06em;opacity:.62;display:block;margin-top:2px}
+.rail-node:hover .nm{color:#fff}
+.rail-node.active::after{content:'';position:absolute;left:6px;right:6px;bottom:0;height:3px;background:#fff}
+.rail-node.active.own::after{background:var(--mesh)}
+.rail-node.active .nm{color:#fff}
+.rail-node:focus-visible{outline:2px solid var(--chip);outline-offset:2px}
+.rail-legend{display:flex;gap:18px;font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:#8FA096;padding:0 0 11px}
+.rail-legend i{display:inline-block;width:16px;height:3px;vertical-align:middle;margin-right:6px}
+.lg-cropin i{background:#3E4C44;height:1px}
+.lg-mamsys i{background:var(--mesh)}
+
+/* ---------- module head ---------- */
+.mhead{background:var(--card);border-bottom:1px solid var(--line);padding:18px 0 0}
+.mhead-in{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;flex-wrap:wrap}
+.mhead .eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--soil-45)}
+.mhead h2{font-size:25px;font-weight:700;margin:3px 0 5px}
+.mhead p{margin:0;max-width:64ch;color:var(--soil-70);font-size:13px}
+.owner{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;padding:5px 10px;border-radius:var(--r);white-space:nowrap}
+.owner.mamsys{background:var(--mesh);color:#fff}
+.owner.cropin{background:var(--steel-soft);color:var(--steel);border:1px solid #BFD5DC}
+.tabs{display:flex;gap:2px;margin-top:15px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{
+  background:none;border:0;border-bottom:2px solid transparent;padding:8px 13px;
+  color:var(--soil-45);cursor:pointer;white-space:nowrap;font-size:12.5px;font-weight:500;
+}
+.tab:hover{color:var(--soil)}
+.tab.on{color:var(--soil);border-bottom-color:var(--mesh)}
+.tab:focus-visible{outline:2px solid var(--steel);outline-offset:-2px}
+
+/* ---------- workspace ---------- */
+main{padding:20px 0 70px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r);margin-bottom:16px}
+.panel-h{
+  display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;
+  padding:11px 15px;border-bottom:1px solid var(--line-soft);
+}
+.panel-h h3{font-size:13px;font-weight:600;letter-spacing:0}
+.panel-h .hint{font-size:11.5px;color:var(--soil-45)}
+.panel-b{padding:15px}
+.panel-b.flush{padding:0}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media(max-width:1080px){.g3,.g4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:720px){.g2,.g3,.g4{grid-template-columns:1fr}}
+
+/* ---------- kpi ---------- */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-bottom:16px}
+.kpi{background:var(--card);padding:12px 14px}
+.kpi .k{font-family:var(--mono);font-size:9.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--soil-45)}
+.kpi .v{font-family:var(--disp);font-size:23px;font-weight:600;letter-spacing:-0.02em;margin-top:3px}
+.kpi .v small{font-size:12px;font-weight:500;color:var(--soil-45);margin-left:3px}
+.kpi .n{font-size:11px;color:var(--soil-45);margin-top:1px}
+.kpi.hi .v{color:var(--mesh)}
+
+/* ---------- tables ---------- */
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th{
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--soil-45);text-align:left;font-weight:500;padding:9px 12px;
+  border-bottom:1px solid var(--line);white-space:nowrap;background:#FAFBFA;position:sticky;top:0;
+}
+td{padding:9px 12px;border-bottom:1px solid var(--line-soft);vertical-align:middle}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:#FAFBFA}
+.num,th.num{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums}
+.tscroll{overflow-x:auto}
+.sub{color:var(--soil-45);font-size:11px}
+tfoot td{border-top:1px solid var(--line);border-bottom:0;font-weight:600;background:#FAFBFA}
+
+/* ---------- chips / badges ---------- */
+.lot{
+  font-family:var(--mono);font-size:11px;background:var(--soil);color:#EDF1EE;
+  padding:2px 7px;border-radius:var(--r);border:0;cursor:pointer;letter-spacing:.02em;
+}
+.lot:hover{background:var(--mesh)}
+.lot:focus-visible{outline:2px solid var(--chip);outline-offset:1px}
+.tag{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:var(--r);white-space:nowrap;display:inline-block}
+.t-ok{background:var(--moss-soft);color:var(--moss)}
+.t-wait{background:var(--warn-soft);color:var(--warn)}
+.t-stop{background:var(--alert-soft);color:var(--alert)}
+.t-info{background:var(--steel-soft);color:var(--steel)}
+.t-mesh{background:var(--mesh-soft);color:var(--mesh)}
+.t-mute{background:#EEF1EF;color:var(--soil-45)}
+
+/* ---------- forms ---------- */
+label{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--soil-45);margin-bottom:4px}
+input,select,textarea{
+  width:100%;padding:7px 9px;border:1px solid var(--line);border-radius:var(--r);
+  background:#fff;font-family:var(--body);font-size:12.5px;color:var(--soil);
+}
+input[type=number]{font-family:var(--mono)}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--steel);outline-offset:-1px;border-color:var(--steel)}
+.field{margin-bottom:11px}
+.fgrid{display:grid;gap:11px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.btn{
+  background:var(--soil);color:#fff;border:1px solid var(--soil);padding:7px 14px;
+  border-radius:var(--r);cursor:pointer;font-weight:500;font-size:12.5px;
+}
+.btn:hover{background:#000}
+.btn.primary{background:var(--mesh);border-color:var(--mesh)}
+.btn.primary:hover{background:#C33F16}
+.btn.ghost{background:transparent;color:var(--soil);border-color:var(--line)}
+.btn.ghost:hover{background:#F3F5F3}
+.btn.sm{padding:4px 9px;font-size:11.5px}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn:focus-visible{outline:2px solid var(--chip);outline-offset:2px}
+.row-actions{display:flex;gap:6px;flex-wrap:wrap}
+
+/* ---------- notes ---------- */
+.note{
+  border-left:3px solid var(--chip);background:#FCF8EE;padding:10px 13px;
+  font-size:12px;color:#5A4A21;border-radius:0 var(--r) var(--r) 0;
+}
+.note b{color:#3E3311}
+.note.q{border-left-color:var(--alert);background:var(--alert-soft);color:#7B2417}
+.note.q b{color:#5C1A11}
+.spec{border-left:3px solid var(--steel);background:var(--steel-soft);padding:10px 13px;font-size:12px;color:#194E5E;border-radius:0 var(--r) var(--r) 0}
+
+/* ---------- drawer (lot passport) ---------- */
+.scrim{position:fixed;inset:0;background:rgba(18,27,23,.42);opacity:0;pointer-events:none;transition:opacity .18s}
+.scrim.on{opacity:1;pointer-events:auto}
+.drawer{
+  position:fixed;top:0;right:0;bottom:0;width:min(452px,94vw);background:var(--card);
+  border-left:1px solid var(--line);transform:translateX(100%);transition:transform .22s cubic-bezier(.4,0,.2,1);
+  z-index:40;display:flex;flex-direction:column;
+}
+.drawer.on{transform:none}
+.drawer-h{padding:15px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.drawer-b{padding:15px;overflow-y:auto;flex:1}
+.close{background:none;border:1px solid var(--line);width:26px;height:26px;border-radius:var(--r);cursor:pointer;color:var(--soil-45);line-height:1}
+.close:hover{background:#F3F5F3;color:var(--soil)}
+.step{position:relative;padding:0 0 15px 21px;border-left:1px solid var(--line);margin-left:5px}
+.step:last-child{border-left-color:transparent;padding-bottom:0}
+.step::before{content:'';position:absolute;left:-4.5px;top:4px;width:8px;height:8px;border-radius:50%;background:var(--line);border:1.5px solid var(--card)}
+.step.done::before{background:var(--moss)}
+.step.own::before{background:var(--mesh)}
+.step .st{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--soil-45)}
+.step .sv{font-size:12.5px;font-weight:500;margin-top:1px}
+.step .sd{font-size:11.5px;color:var(--soil-45)}
+.kv{display:flex;justify-content:space-between;gap:12px;padding:5px 0;border-bottom:1px solid var(--line-soft);font-size:12.5px}
+.kv:last-child{border-bottom:0}
+.kv .k{color:var(--soil-45)}
+.kv .v{font-family:var(--mono);text-align:right}
+
+/* ---------- toast ---------- */
+.toast{
+  position:fixed;left:50%;bottom:26px;transform:translate(-50%,14px);background:var(--soil);color:#fff;
+  padding:9px 16px;border-radius:var(--r);font-size:12.5px;opacity:0;pointer-events:none;transition:.2s;z-index:60;
+}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+
+/* ---------- misc ---------- */
+.split{display:grid;grid-template-columns:1.25fr .95fr;gap:16px;align-items:start}
+@media(max-width:960px){.split{grid-template-columns:1fr}}
+.stack>*+*{margin-top:11px}
+.pill-row{display:flex;gap:6px;flex-wrap:wrap}
+.mini{font-family:var(--mono);font-size:10.5px;color:var(--soil-45)}
+.ledger td{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.ledger td.txt{font-family:var(--body)}
+.dedn td:first-child{width:44%}
+.big-money{font-family:var(--disp);font-size:27px;font-weight:600;letter-spacing:-0.02em}
+.rule{height:1px;background:var(--line-soft);margin:13px 0}
+.flag{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:5px;vertical-align:middle}
+.f-ok{background:var(--moss)}.f-warn{background:var(--chip)}.f-stop{background:var(--alert)}
+.readonly::before{
+  content:'FROM CROPIN \00B7 READ ONLY';display:inline-block;font-family:var(--mono);font-size:9px;
+  letter-spacing:.13em;color:var(--steel);background:var(--steel-soft);border:1px solid #BFD5DC;
+  padding:2px 8px;border-radius:var(--r);margin-bottom:7px;
+}
+.rail-node.meta .dot{background:var(--chip);border-color:var(--chip)}
+.rail-node.meta{color:#D9C89A}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media print{.mast,.mhead,.tabs{display:none}}
+</style>
+</head>
+<body>
+
+<header class="mast">
+  <div class="wrap">
+    <div class="mast-top">
+      <div class="brand">
+        <h1>Balaji Wafers · Potato value chain</h1>
+        <span class="sub">Build reference for MAMSYS</span>
+      </div>
+      <div class="mast-meta">
+        <span>Season <b>Rabi 2025-26</b></span>
+        <span>Region <b>Deesa, Banaskantha</b></span>
+        <span>Contracted <b id="mm-acres">—</b></span>
+        <span>Prototype <b>v1 · dummy data</b></span>
+      </div>
+    </div>
+    <div class="rail-scroll"><div class="rail" id="rail"></div></div>
+    <div class="rail-legend">
+      <span class="lg-cropin"><i></i>Cropin — live today, source of record</span>
+      <span class="lg-mamsys"><i></i>MAMSYS — to be built</span>
+    </div>
+  </div>
+</header>
+
+<div class="mhead">
+  <div class="wrap">
+    <div class="mhead-in">
+      <div>
+        <div class="eyebrow" id="m-eyebrow"></div>
+        <h2 id="m-title"></h2>
+        <p id="m-desc"></p>
+      </div>
+      <div class="owner" id="m-owner"></div>
+    </div>
+    <div class="tabs" id="tabs"></div>
+  </div>
+</div>
+
+<main><div class="wrap" id="view">
+  <section class="panel" id="boot-status">
+    <div class="panel-b">
+      Loading the interactive prototype… If this message remains, open the published GitHub Pages URL rather than the file preview inside the repository.
+    </div>
+  </section>
+</div></main>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-label="Lot passport">
+  <div class="drawer-h">
+    <div>
+      <div class="eyebrow mono" style="font-size:10px;letter-spacing:.14em;color:var(--soil-45)">LOT PASSPORT</div>
+      <h3 id="dr-title" style="font-family:var(--mono);font-size:16px;margin-top:2px"></h3>
+      <div class="sub" id="dr-sub"></div>
+    </div>
+    <button class="close" id="dr-close" aria-label="Close">✕</button>
+  </div>
+  <div class="drawer-b" id="dr-body"></div>
+</aside>
+<footer style="border-top:1px solid var(--line);margin-top:10px;padding:16px 0 30px">
+  <div class="wrap" style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
+       font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:var(--soil-45)">
+    <span>CONFIDENTIAL · Balaji Wafers, Cropin Technology Solutions and MAMSYS only. Not for onward distribution.</span>
+    <span>Companion to BW-MAM-BRD-01 · all names, rates and quantities are dummy data, not Balaji contract terms</span>
+  </div>
+</footer>
+<div class="toast" id="toast"></div>
+
+<script>
+/* =========================================================================
+   BALAJI WAFERS — POTATO VALUE CHAIN
+   Prototype reference build for MAMSYS.  All data below is dummy.
+   Cropin = source of record for agronomy.  MAMSYS = modules 06,07,10,11,12.
+   ========================================================================= */
+
+/* ---------------------------------- utils ------------------------------ */
+const $  = (s,r=document)=>r.querySelector(s);
+const $$ = (s,r=document)=>Array.from(r.querySelectorAll(s));
+const INR = n => '\u20B9' + Math.round(n).toLocaleString('en-IN');
+const INR2 = n => '\u20B9' + n.toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2});
+const N = (n,d=2) => Number(n).toLocaleString('en-IN',{minimumFractionDigits:d,maximumFractionDigits:d});
+const esc = s => String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const dmy = s => { const d=new Date(s); return String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear(); };
+const uid = p => p+'-'+Math.floor(1000+Math.random()*9000);
+function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('on'); clearTimeout(t._x); t._x=setTimeout(()=>t.classList.remove('on'),2400); }
+
+/* ------------------------------ master data ---------------------------- */
+const RATE = {                       // buy-back, Rs per MT, by variety
+  'Chipsona-3':11500, 'Chipsona-1':11200, 'Lady Rosetta':12200, 'Santana':11800
+};
+const CFG = {
+  seedRate      : 2600,   // Rs per quintal of seed issued by company
+  seedRecovery  : 0.50,   // 50% of seed value recovered at billing
+  seedPenalty   : 100,    // Rs per seed bag if farmer did not pay 50% at booking
+  lenoRate      : 15.90,  // Rs per bag, from the awarded rate contract
+  labourPerBag  : 18,     // Rs per bag when harvest labour is arranged by company
+  bagKg         : 50,
+  coldRentBag   : 122,    // Rs per bag per season
+  cipcPerMT     : 210,    // Rs per MT, sprout suppressant
+  qcSlab: [ {upto:5,  rate:0,    label:'Within spec'},
+            {upto:8,  rate:250,  label:'Minor'},
+            {upto:12, rate:600,  label:'Major'},
+            {upto:99, rate:1200, label:'Out of spec — refer'} ],
+  solidIncentive: [ {min:20.5, rate:300}, {min:19.5, rate:150}, {min:0, rate:0} ],
+  plantSpec: { tpod:8, uc:2.5, greening:1.5, undersize:8, solidMin:19 }
+};
+
+const FARMERS = [
+  {code:'BW-DSA-0117', name:'Rameshbhai Patel',      village:'Bhildi',  acres:12, variety:'Chipsona-3',   seedQ:96,  paid50:true,  yld:12.5, coLabour:true },
+  {code:'BW-DSA-0121', name:'Kanjibhai Chaudhary',   village:'Dhanera', acres:8,  variety:'Lady Rosetta', seedQ:64,  paid50:true,  yld:13.0, coLabour:false},
+  {code:'BW-DSA-0134', name:'Dineshbhai Thakor',     village:'Lakhani', acres:15, variety:'Chipsona-3',   seedQ:120, paid50:false, yld:12.0, coLabour:true },
+  {code:'BW-DSA-0142', name:'Hasmukhbhai Prajapati', village:'Rasana',  acres:6,  variety:'Santana',      seedQ:48,  paid50:true,  yld:11.5, coLabour:false},
+  {code:'BW-DSA-0156', name:'Bharatbhai Desai',      village:'Bhachar', acres:20, variety:'Chipsona-1',   seedQ:160, paid50:true,  yld:13.5, coLabour:true },
+  {code:'BW-DSA-0163', name:'Vinodbhai Rabari',      village:'Zerda',   acres:10, variety:'Chipsona-3',   seedQ:80,  paid50:false, yld:12.0, coLabour:false},
+  {code:'BW-DSA-0171', name:'Alpeshbhai Patel',      village:'Kanodar', acres:9,  variety:'Lady Rosetta', seedQ:72,  paid50:true,  yld:12.8, coLabour:true },
+  {code:'BW-DSA-0188', name:'Jayantibhai Solanki',   village:'Rajpur',  acres:14, variety:'Chipsona-3',   seedQ:112, paid50:true,  yld:12.2, coLabour:false}
+];
+const fmr = c => FARMERS.find(f=>f.code===c);
+
+const STORES = [
+  {id:'CS-01', name:'Shree Ganesh Cold Storage, Deesa', cap:42000, rent:122, km:{'Rajkot':285,'Valsad':480,'Indore':430}},
+  {id:'CS-02', name:'Banas Cold Chain, Dhanera',        cap:30000, rent:118, km:{'Rajkot':302,'Valsad':498,'Indore':448}},
+  {id:'CS-03', name:'Patel Himghar, Lakhani',           cap:26000, rent:128, km:{'Rajkot':294,'Valsad':489,'Indore':439}}
+];
+const store = id => STORES.find(s=>s.id===id);
+const PLANTS = ['Rajkot','Valsad','Indore'];
+
+/* ------------------------------ transactions --------------------------- */
+const DB = {
+  lenoQuotes:[
+    {id:'LQ-01', vendor:'Gujarat Mesh Industries, Rajkot', rate:15.90, gsm:55, moq:50000, days:18, credit:'45 days', score:0},
+    {id:'LQ-02', vendor:'Shakti Packaging, Ahmedabad',     rate:16.80, gsm:60, moq:25000, days:12, credit:'30 days', score:0},
+    {id:'LQ-03', vendor:'Nirmal Polysacks, Deesa',         rate:17.40, gsm:65, moq:10000, days:7,  credit:'Advance', score:0}
+  ],
+  lenoAward:null,
+  lenoPOs:[],
+  lenoGRNs:[],
+  lenoIssues:[
+    {id:'LI-1001', code:'BW-DSA-0117', date:'2026-02-18', bags:3200, store:'CS-01'},
+    {id:'LI-1002', code:'BW-DSA-0121', date:'2026-02-19', bags:2250, store:'CS-02'},
+    {id:'LI-1003', code:'BW-DSA-0134', date:'2026-02-20', bags:3900, store:'CS-03'},
+    {id:'LI-1004', code:'BW-DSA-0142', date:'2026-02-21', bags:1500, store:'CS-01'},
+    {id:'LI-1005', code:'BW-DSA-0156', date:'2026-02-22', bags:5600, store:'CS-01'},
+    {id:'LI-1006', code:'BW-DSA-0163', date:'2026-02-23', bags:2500, store:'CS-02'}
+  ],
+  lenoReturns:[ {code:'BW-DSA-0117', bags:60}, {code:'BW-DSA-0156', bags:120} ],
+
+  transRates:[
+    {id:'TR-01', transporter:'Banas Roadlines',        veh:'14 MT · Open body', field:190, plant:{'Rajkot':1240,'Valsad':1950,'Indore':1780}, awarded:true },
+    {id:'TR-02', transporter:'Shree Ambica Transport', veh:'9 MT · Open body',  field:215, plant:{'Rajkot':1310,'Valsad':2040,'Indore':1865}, awarded:false},
+    {id:'TR-03', transporter:'Deesa Carriers',         veh:'16 MT · Container', field:205, plant:{'Rajkot':1195,'Valsad':1890,'Indore':1720}, awarded:true }
+  ],
+  indents:[
+    {id:'IND-2041', code:'BW-DSA-0171', date:'2026-03-06', bags:2300, store:'CS-01', status:'Open',  trip:null},
+    {id:'IND-2042', code:'BW-DSA-0188', date:'2026-03-07', bags:3400, store:'CS-03', status:'Open',  trip:null}
+  ],
+  trips:[
+    {id:'TRP-5001', indent:'IND-2031', code:'BW-DSA-0117', transporter:'Banas Roadlines', veh:'GJ-08-AT-4412', driver:'Ishwarbhai Rabari', mob:'98252 41180',
+     store:'CS-01', bags:3140, loadKg:157000, recvKg:156420, date:'2026-03-01', status:'Unloaded', lot:'LOT-DSA-0117A'},
+    {id:'TRP-5002', indent:'IND-2032', code:'BW-DSA-0121', transporter:'Deesa Carriers', veh:'GJ-08-AU-9021', driver:'Sureshbhai Thakor', mob:'94263 77104',
+     store:'CS-02', bags:2190, loadKg:109500, recvKg:109180, date:'2026-03-02', status:'Unloaded', lot:'LOT-DSA-0121A'},
+    {id:'TRP-5003', indent:'IND-2033', code:'BW-DSA-0134', transporter:'Banas Roadlines', veh:'GJ-08-AT-4412', driver:'Ishwarbhai Rabari', mob:'98252 41180',
+     store:'CS-03', bags:3820, loadKg:191000, recvKg:190100, date:'2026-03-03', status:'Unloaded', lot:'LOT-DSA-0134A'},
+    {id:'TRP-5004', indent:'IND-2034', code:'BW-DSA-0142', transporter:'Deesa Carriers', veh:'GJ-08-AU-9021', driver:'Rajubhai Desai', mob:'99042 60553',
+     store:'CS-01', bags:1460, loadKg:73000, recvKg:72840, date:'2026-03-04', status:'Unloaded', lot:'LOT-DSA-0142A'},
+    {id:'TRP-5005', indent:'IND-2035', code:'BW-DSA-0156', transporter:'Banas Roadlines', veh:'GJ-08-AV-1177', driver:'Mafatbhai Patel', mob:'98795 33218',
+     store:'CS-01', bags:5480, loadKg:274000, recvKg:273100, date:'2026-03-05', status:'Unloaded', lot:'LOT-DSA-0156A'},
+    {id:'TRP-5006', indent:'IND-2036', code:'BW-DSA-0163', transporter:'Deesa Carriers', veh:'GJ-08-AU-9021', driver:'Sureshbhai Thakor', mob:'94263 77104',
+     store:'CS-02', bags:2440, loadKg:122000, recvKg:0, date:'2026-03-06', status:'In transit', lot:null}
+  ],
+  freightBills:[],
+
+  /* lots — created at cold-store intake (Cropin), consumed by MAMSYS modules */
+  lots:[
+    {id:'LOT-DSA-0117A', code:'BW-DSA-0117', variety:'Chipsona-3',   store:'CS-01', bags:3140, kg:156420, out:1200, date:'2026-03-01', status:'In store',
+     qc:{uc:1.4,db:0.8,id:1.1,ed:1.6,solid:20.8, undersize:4.2,greening:0.6,bruise:1.1,black:0.3,crack:0.8,secondary:0.5}},
+    {id:'LOT-DSA-0121A', code:'BW-DSA-0121', variety:'Lady Rosetta', store:'CS-02', bags:2190, kg:109180, date:'2026-03-02', status:'In store',
+     qc:{uc:2.1,db:1.4,id:1.9,ed:2.3,solid:21.4, undersize:6.1,greening:1.2,bruise:1.8,black:0.5,crack:1.2,secondary:0.9}},
+    {id:'LOT-DSA-0134A', code:'BW-DSA-0134', variety:'Chipsona-3',   store:'CS-03', bags:3820, kg:190100, date:'2026-03-03', status:'In store',
+     qc:{uc:3.2,db:2.4,id:2.8,ed:3.1,solid:18.6, undersize:9.4,greening:2.1,bruise:2.6,black:1.1,crack:1.9,secondary:1.4}},
+    {id:'LOT-DSA-0142A', code:'BW-DSA-0142', variety:'Santana',      store:'CS-01', bags:1460, kg:72840,  date:'2026-03-04', status:'In store',
+     qc:{uc:1.8,db:1.1,id:1.4,ed:1.9,solid:20.1, undersize:5.3,greening:0.9,bruise:1.4,black:0.4,crack:1.0,secondary:0.7}},
+    {id:'LOT-DSA-0156A', code:'BW-DSA-0156', variety:'Chipsona-1',   store:'CS-01', bags:5480, kg:273100, date:'2026-03-05', status:'In store',
+     qc:{uc:1.2,db:0.7,id:0.9,ed:1.3,solid:21.9, undersize:3.6,greening:0.4,bruise:0.9,black:0.2,crack:0.6,secondary:0.4}}
+  ],
+  bills:[], adj:{},
+  dispatches:[
+    {id:'DSP-3001', lot:'LOT-DSA-0117A', plant:'Rajkot', store:'CS-01', bags:1200, kg:60000, date:'2026-04-12',
+     transporter:'Banas Roadlines', veh:'GJ-08-AT-4412', driver:'Ishwarbhai Rabari', mob:'98252 41180',
+     lr:'LR-77341', status:'Received', recvKg:59760}
+  ],
+  cipc:[ {store:'CS-01', date:'2026-03-20', litres:38, mt:502.4}, {store:'CS-02', date:'2026-03-21', litres:9, mt:109.2}, {store:'CS-03', date:'2026-03-22', litres:15, mt:190.1} ],
+  otherCosts:[ {head:'Other', item:'Field supervision & mandi staff', amt:186000}, {head:'Other', item:'Weighbridge & gate charges', amt:41500} ]
+};
+
+/* --------------------------- derived calculations ---------------------- */
+const tpod   = q => +(q.uc + q.db + q.id + q.ed).toFixed(1);
+const physTot= q => +(q.undersize+q.greening+q.bruise+q.black+q.crack+q.secondary).toFixed(1);
+const lotMT  = l => l.kg/1000;
+const lot    = id => DB.lots.find(l=>l.id===id);
+const remB   = l => l.bags - (l.out||0);                 /* bags still in store */
+const remKg  = l => l.kg   - (l.out||0)*CFG.bagKg;       /* weight still in store */
+
+function qcSlabFor(t){ return CFG.qcSlab.find(s=>t<=s.upto); }
+function incentiveFor(solid){ return CFG.solidIncentive.find(s=>solid>=s.min).rate; }
+
+/* leno bags: issued − returned empty − accounted by bags actually delivered */
+function lenoBalance(code){
+  const issued  = DB.lenoIssues.filter(i=>i.code===code).reduce((s,i)=>s+i.bags,0);
+  const ret     = DB.lenoReturns.filter(r=>r.code===code).reduce((s,r)=>s+r.bags,0);
+  const used    = DB.lots.filter(l=>l.code===code).reduce((s,l)=>s+l.bags,0);
+  return {issued, ret, used, open: issued-ret-used};
+}
+function lenoStock(){
+  const rec = DB.lenoGRNs.reduce((s,g)=>s+g.bags,0);
+  const iss = DB.lenoIssues.reduce((s,i)=>s+i.bags,0);
+  const ret = DB.lenoReturns.reduce((s,r)=>s+r.bags,0);
+  return {rec, iss, ret, closing: rec-iss+ret};
+}
+function bagsNeeded(f){ return Math.ceil(f.acres*f.yld*1000/CFG.bagKg); }
+
+/* full farmer bill — this is the calculation MAMSYS has to reproduce */
+function buildBill(code){
+  const f = fmr(code);
+  const ls = DB.lots.filter(l=>l.code===code);
+  if(!ls.length) return null;
+  const kg = ls.reduce((s,l)=>s+l.kg,0), mt = kg/1000;
+  const wTpod  = ls.reduce((s,l)=>s+tpod(l.qc)*l.kg,0)/kg;
+  const wSolid = ls.reduce((s,l)=>s+l.qc.solid*l.kg,0)/kg;
+  const rate   = RATE[f.variety];
+  const gross  = mt*rate;
+  const slab   = qcSlabFor(wTpod);
+  const bal    = lenoBalance(code);
+  const seedBags = f.seedQ*2;
+
+  const A = DB.adj[code] || {other:0, comp:0};
+  const ded = [
+    {k:'Quality deduction',              v: mt*slab.rate,                             n:`TPOD ${N(wTpod,1)}% · ${slab.label} · ${INR(slab.rate)}/MT`},
+    {k:'Leno bag deduction',             v: Math.max(0,bal.open)*CFG.lenoRate,        n:`${bal.open} bags unaccounted \u00D7 ${INR2(CFG.lenoRate)}`},
+    {k:'Seed recovery (50%)',            v: f.seedQ*CFG.seedRate*CFG.seedRecovery,    n:`${f.seedQ} q \u00D7 ${INR(CFG.seedRate)}/q \u00D7 50%`},
+    {k:'Harvest labour',                 v: f.coLabour ? ls.reduce((s,l)=>s+l.bags,0)*CFG.labourPerBag : 0, n: f.coLabour?`${ls.reduce((s,l)=>s+l.bags,0)} bags \u00D7 ${INR(CFG.labourPerBag)}`:'Farmer arranged — nil'},
+    {k:'Seed booking penalty',           v: f.paid50 ? 0 : seedBags*CFG.seedPenalty,  n: f.paid50?'50% paid at booking \u2014 nil':`${seedBags} seed bags \u00D7 ${INR(CFG.seedPenalty)}`},
+    {k:'Other deduction',                v: A.other||0,                               n:'Manual entry by the billing clerk'}
+  ];
+  const inc = incentiveFor(wSolid);
+  const add = [
+    {k:'Solids incentive', v: mt*inc, n:`Solid ${N(wSolid,1)}% \u00B7 ${INR(inc)}/MT`},
+    {k:'Compensation adjustment', v: A.comp||0, n: A.comp? 'Complaint settlement approved' : 'No open complaint settlement'}
+  ];
+  const dedT = ded.reduce((s,d)=>s+d.v,0), addT = add.reduce((s,a)=>s+a.v,0);
+  const rec = DB.bills.find(b=>b.code===code);
+  return {code, f, lots:ls, mt, rate, gross, ded, add, dedT, addT, net: gross-dedT+addT,
+          wTpod, wSolid, status: rec? rec.status : 'Draft', bill: rec};
+}
+function allBills(){ return FARMERS.map(f=>buildBill(f.code)).filter(Boolean); }
+
+/* freight */
+function freightField(t){ const r = DB.transRates.find(r=>r.transporter===t.transporter); return (t.recvKg||t.loadKg)/1000*r.field; }
+function freightPlant(d){ const r = DB.transRates.find(r=>r.transporter===d.transporter); return d.kg/1000*r.plant[d.plant]; }
+
+/* season cost build-up — the seven heads from the requirement sheet */
+function costHeads(){
+  const bills = allBills();
+  const farmerNet = bills.reduce((s,b)=>s+b.net,0);
+  const delivered = FARMERS.filter(f=>DB.lots.some(l=>l.code===f.code));
+  const seedGross = delivered.reduce((s,f)=>s+f.seedQ*CFG.seedRate,0);
+  const seedRecov = bills.reduce((s,b)=>s+b.ded[2].v,0);
+  const frField   = DB.trips.filter(t=>t.status==='Unloaded').reduce((s,t)=>s+freightField(t),0);
+  const frPlant   = DB.dispatches.reduce((s,d)=>s+freightPlant(d),0);
+  const bagsStored= DB.lots.reduce((s,l)=>s+l.bags,0);
+  const coldRent  = DB.lots.reduce((s,l)=>s+l.bags*store(l.store).rent,0);
+  const cipcCost  = DB.cipc.reduce((s,c)=>s+c.mt*CFG.cipcPerMT,0);
+  const bagsUsed  = DB.lots.reduce((s,l)=>s+l.bags,0);
+  const lenoCost  = bagsUsed*CFG.lenoRate;
+  const lenoRecov = bills.reduce((s,b)=>s+b.ded[1].v,0);
+  const other     = DB.otherCosts.reduce((s,o)=>s+o.amt,0);
+  const rows = [
+    {no:1, head:'Farmer level',     amt:farmerNet,           n:'Net payable across settled and draft bills'},
+    {no:2, head:'Transportation',   amt:frField+frPlant,     n:`Field\u2192store ${INR(frField)} \u00B7 store\u2192plant ${INR(frPlant)}`},
+    {no:3, head:'Seed',             amt:seedGross-seedRecov, n:`${delivered.length} delivered farmers \u00B7 issued ${INR(seedGross)} less 50% recovered ${INR(seedRecov)}`},
+    {no:4, head:'Cold storage rent',amt:coldRent,            n:`${bagsStored.toLocaleString('en-IN')} bags at the store-wise season rate`},
+    {no:5, head:'CIPC chemical',    amt:cipcCost,            n:`${DB.cipc.reduce((s,c)=>s+c.litres,0)} L applied \u00B7 ${INR(CFG.cipcPerMT)}/MT`},
+    {no:6, head:'Leno bag',         amt:lenoCost-lenoRecov,  n:`${bagsUsed.toLocaleString('en-IN')} bags delivered with potato, less ${INR(lenoRecov)} recovered \u00B7 unissued stock stays in inventory`},
+    {no:7, head:'Other',            amt:other,               n:'Supervision, weighbridge, gate charges'}
+  ];
+  const total = rows.reduce((s,r)=>s+r.amt,0);
+  const mt = DB.lots.reduce((s,l)=>s+lotMT(l),0);
+  return {rows, total, mt, perMT: total/mt};
+}
+
+/* --------------------------------- stages ------------------------------ */
+const STAGES = [
+  {n:'00', id:'scope',     nm:'Scope & handoff',       dap:'Read me first', own:'meta'},
+  {n:'01', id:'contract',  nm:'Contract farming',      dap:'Pre-season',    own:false},
+  {n:'02', id:'farmer',    nm:'Farmer & plot',         dap:'Pre-season',    own:false},
+  {n:'03', id:'seed',      nm:'Seed distribution',     dap:'D-15 \u2192 D0',own:false},
+  {n:'04', id:'sowing',    nm:'Sowing',                dap:'D0',            own:false},
+  {n:'05', id:'monitor',   nm:'Crop monitoring',       dap:'10\u2013100 DAP',own:false},
+  {n:'06', id:'leno',      nm:'Leno bag management',   dap:'60\u201395 DAP', own:true},
+  {n:'07', id:'transport', nm:'Transport management',  dap:'95\u2013115 DAP',own:true},
+  {n:'08', id:'intake',    nm:'Cold store intake',     dap:'Harvest',       own:false},
+  {n:'09', id:'store',     nm:'Cold store monitoring', dap:'Storage',       own:false},
+  {n:'10', id:'billing',   nm:'Farmer billing',        dap:'H+7 \u2192 H+30',own:true},
+  {n:'11', id:'dispatch',  nm:'Dispatch to plant',     dap:'Year-round',    own:true},
+  {n:'12', id:'accounts',  nm:'Accounting & inventory',dap:'Continuous',    own:true}
+];
+const MOD = {};   /* filled by the module definitions below */
+
+let cur = {stage:'scope', tab:0};
+
+function renderRail(){
+  $('#rail').innerHTML = STAGES.map(s=>`
+    <button class="rail-node ${s.own===true?'own':''} ${s.own==='meta'?'meta':''} ${cur.stage===s.id?'active':''}" data-stage="${s.id}">
+      <span class="tick"><span class="dot"></span></span>
+      <span class="num">${s.n}</span>
+      <span class="nm">${s.nm}</span>
+      <span class="dap">${s.dap}</span>
+    </button>`).join('');
+}
+function go(stageId, tab=0){
+  cur = {stage:stageId, tab};
+  const s = STAGES.find(x=>x.id===stageId), m = MOD[stageId];
+  renderRail();
+  $('#m-eyebrow').textContent = s.own===true ? `Stage ${s.n} \u00B7 ${s.dap} \u00B7 MAMSYS scope` : `Stage ${s.n} \u00B7 ${s.dap}`;
+  $('#m-title').textContent = s.nm;
+  $('#m-desc').textContent = m.desc;
+  const o = $('#m-owner');
+  o.className = 'owner ' + (s.own===true?'mamsys':'cropin');
+  o.textContent = s.own===true ? 'MAMSYS builds' : (s.own==='meta' ? 'Joint' : 'Cropin \u00B7 live');
+  if(s.own==='meta'){ o.className='owner cropin'; }
+  $('#tabs').innerHTML = m.tabs.map((t,i)=>`<button class="tab ${i===tab?'on':''}" data-tab="${i}">${t}</button>`).join('');
+  $('#view').innerHTML = m.render(tab);
+  window.scrollTo({top:0,behavior:'auto'});
+}
+document.addEventListener('click', e=>{
+  const r = e.target.closest('[data-stage]'); if(r){ go(r.dataset.stage); return; }
+  const t = e.target.closest('[data-tab]');   if(t){ go(cur.stage, +t.dataset.tab); return; }
+  const l = e.target.closest('[data-lot]');   if(l){ openLot(l.dataset.lot); return; }
+});
+/* ======================= shared render helpers ========================== */
+function panel(title, body, hint, flush){
+  return `<section class="panel"><div class="panel-h"><h3>${title}</h3>${hint?`<span class="hint">${hint}</span>`:''}</div>
+  <div class="panel-b ${flush?'flush':''}">${body}</div></section>`;
+}
+function kpis(list){
+  return `<div class="kpis">${list.map(k=>`<div class="kpi ${k.hi?'hi':''}">
+    <div class="k">${k.k}</div><div class="v">${k.v}${k.u?`<small>${k.u}</small>`:''}</div>
+    ${k.n?`<div class="n">${k.n}</div>`:''}</div>`).join('')}</div>`;
+}
+function table(cols, rows, foot){
+  return `<div class="tscroll"><table><thead><tr>${cols.map(c=>`<th class="${c.n?'num':''}">${c.t}</th>`).join('')}</tr></thead>
+  <tbody>${rows.join('')}</tbody>${foot?`<tfoot>${foot}</tfoot>`:''}</table></div>`;
+}
+function fieldList(groups){
+  return `<div class="grid g3">${groups.map(g=>`<div>
+    <div class="mini" style="letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px">${g.t}</div>
+    <div class="pill-row">${g.f.map(f=>`<span class="tag t-mute">${f}</span>`).join('')}</div>
+  </div>`).join('')}</div>`;
+}
+function code(obj){
+  return `<pre class="mono" style="background:#12211C;color:#CFE0D6;padding:13px;border-radius:3px;overflow-x:auto;font-size:11.5px;line-height:1.55;margin:0">${esc(JSON.stringify(obj,null,2))}</pre>`;
+}
+function lotChip(id){ return `<button class="lot" data-lot="${id}">${id}</button>`; }
+function qcFlag(v,limit){ return v<=limit ? `<span class="flag f-ok"></span>` : v<=limit*1.25 ? `<span class="flag f-warn"></span>` : `<span class="flag f-stop"></span>`; }
+
+/* =============================== 00 SCOPE =============================== */
+MOD.scope = {
+  desc:'What Cropin already runs, what MAMSYS builds, and the join keys between the two systems. Every screen after this one is a working prototype — the numbers recalculate as you enter data.',
+  tabs:['Scope split','Data contract','Entity model','Field dictionary'],
+  render(t){
+    if(t===0) return `
+    ${kpis([
+      {k:'Modules in requirement', v:'12', n:'POP tracking sheet, left to right'},
+      {k:'Covered by Cropin', v:'7', n:'Agronomy, monitoring, cold chain'},
+      {k:'To be built by MAMSYS', v:'5', hi:true, n:'Leno, transport, billing, dispatch, accounts'},
+      {k:'Shared join keys', v:'3', n:'Farmer code · Lot barcode · Season'}
+    ])}
+    ${panel('Module ownership', table(
+      [{t:'#'},{t:'Module'},{t:'Owner'},{t:'Runs on'},{t:'Reads from'},{t:'Writes back'}],
+      [
+        ['01','Contract farming','Cropin','Cropin','—','—'],
+        ['02','Farmer & plot registration','Cropin','Cropin','—','—'],
+        ['03','Seed booking & distribution','Cropin','Cropin','—','Seed qty, 50% paid flag \u2192 MAMSYS'],
+        ['04','Sowing','Cropin','Cropin','—','—'],
+        ['05','Crop monitoring 10\u2013100 DAP','Cropin','Cropin','—','Expected yield \u2192 MAMSYS'],
+        ['06','Leno bag management','MAMSYS','MAMSYS','Farmer master, expected yield','Bags issued, bag balance'],
+        ['07','Transport management','MAMSYS','MAMSYS','Harvest indent, farmer master','Trip, vehicle, LR, freight'],
+        ['08','Cold store intake & lot QC','Cropin','Cropin','Trip ID from MAMSYS','Lot barcode, weight, QC \u2192 MAMSYS'],
+        ['09','Cold store monitoring','Cropin','Cropin','—','CIPC date, storage days \u2192 MAMSYS'],
+        ['10','Farmer billing','MAMSYS','MAMSYS','Lot weight, QC, seed, bags','Net payable, settlement status'],
+        ['11','Dispatch to plant','MAMSYS','MAMSYS','Lot, store stock, plant spec','Challan, LR, stock movement'],
+        ['12','Accounting & inventory','MAMSYS','MAMSYS','All of the above','Landed cost per MT']
+      ].map(r=>`<tr><td class="mono">${r[0]}</td><td><b>${r[1]}</b></td>
+        <td><span class="tag ${r[2]==='MAMSYS'?'t-mesh':'t-info'}">${r[2]}</span></td>
+        <td>${r[3]}</td><td class="sub">${r[4]}</td><td class="sub">${r[5]}</td></tr>`)
+    ),'Column order follows the POP tracking sheet, left to right',true)}
+    <div class="note"><b>The handoff happens twice.</b> Once before harvest — Cropin's farmer, plot and expected-yield data flows into leno bag and transport planning. Once at cold store intake — Cropin generates the lot barcode and quality result, and every rupee in billing, dispatch and accounting is calculated against that barcode. Get the barcode right and the rest of the platform holds together.</div>`;
+
+    if(t===1) return `
+    ${panel('Cropin \u2192 MAMSYS', table(
+      [{t:'API'},{t:'Trigger'},{t:'Frequency'},{t:'Key payload'}],
+      [
+        ['GET /farmers','Season start, then daily delta','Daily','Farmer code, name, village, contract acres, variety, plot geo-tag'],
+        ['GET /seed-issues','On seed dispatch','Event','Farmer code, seed quintals, seed rate, 50%-paid flag'],
+        ['GET /crop-status','Weekly during monitoring','Weekly','Farmer code, DAP, expected yield MT/acre, alert flags'],
+        ['GET /harvest-plan','On harvest date confirmation','Event','Farmer code, expected harvest date, expected bags'],
+        ['GET /lots','On cold store intake','Event','Lot barcode, farmer code, variety, store, bags, received weight'],
+        ['GET /lots/{id}/qc','On QC sample completion','Event','Sample-wise UC, DB, ID, ED, TPOD, Solid %, physical defects'],
+        ['GET /store-conditions','Hourly telemetry rollup','Daily','Store, date, temp, RH, CO2, CIPC application date']
+      ].map(r=>`<tr><td class="mono">${r[0]}</td><td>${r[1]}</td><td><span class="tag t-mute">${r[2]}</span></td><td class="sub">${r[3]}</td></tr>`)
+    ),null,true)}
+    ${panel('MAMSYS \u2192 Cropin', table(
+      [{t:'API'},{t:'Trigger'},{t:'Why Cropin needs it'}],
+      [
+        ['POST /leno-issues','Bags issued to a farmer','Field officer sees bag balance inside the farmer profile'],
+        ['POST /trips','Vehicle allocated against an indent','Intake screen pre-fills vehicle, driver, expected bags'],
+        ['POST /settlements','Bill approved and paid','Payment status shows on the farmer app'],
+        ['POST /dispatches','Lot dispatched to plant','Store stock in Cropin stays in step with physical stock']
+      ].map(r=>`<tr><td class="mono">${r[0]}</td><td>${r[1]}</td><td class="sub">${r[2]}</td></tr>`)
+    ),null,true)}
+    ${panel('Sample lot payload — the object everything downstream hangs off', code({
+      lot_barcode:'LOT-DSA-0117A', season:'Rabi 2025-26', farmer_code:'BW-DSA-0117',
+      variety:'Chipsona-3', cold_store_id:'CS-01', trip_id:'TRP-5001',
+      dispatched_bags:3140, dispatched_weight_kg:157000, received_weight_kg:156420,
+      intake_date:'2026-03-01',
+      qc:{samples:5, frying:{uc:1.4, db:0.8, id:1.1, ed:1.6, tpod:4.9, solid_pct:20.8},
+          physical:{undersize:4.2, greening:0.6, dried_bruise:1.1, black_heart:0.3, growth_crack:0.8, secondary_growth:0.5}}
+    }))}
+    <div class="note q"><b>Open with Balaji before build.</b> Confirm the expansions and tolerance bands for UC, DB, ID, ED and TPOD, and whether TPOD is entered by the lab or derived from the four components. This prototype derives it (TPOD = UC + DB + ID + ED) so the arithmetic is visible — if Balaji enters it independently, the field becomes an input and the four components become a cross-check, not a formula.</div>`;
+
+    if(t===2) return `
+    ${panel('Entities MAMSYS owns', table(
+      [{t:'Entity'},{t:'Primary key'},{t:'Foreign keys'},{t:'Owned by'}],
+      [
+        ['leno_quotation','quote_id','season','MAMSYS'],
+        ['leno_po / leno_grn','po_id, grn_id','quote_id, store_id','MAMSYS'],
+        ['leno_issue','issue_id','farmer_code, store_id','MAMSYS'],
+        ['leno_return','return_id','farmer_code','MAMSYS'],
+        ['transport_rate','rate_id','transporter_id, route','MAMSYS'],
+        ['indent','indent_id','farmer_code, store_id','MAMSYS'],
+        ['trip','trip_id','indent_id, rate_id, lot_barcode','MAMSYS'],
+        ['freight_bill','fbill_id','trip_id or dispatch_id','MAMSYS'],
+        ['farmer_bill','bill_id','farmer_code, lot_barcode[]','MAMSYS'],
+        ['dispatch','dispatch_id','lot_barcode, plant_id, transporter_id','MAMSYS'],
+        ['cost_entry','cost_id','head, farmer_code / lot_barcode','MAMSYS'],
+        ['inventory_txn','txn_id','item, store_id, lot_barcode','MAMSYS']
+      ].map(r=>`<tr><td class="mono">${r[0]}</td><td class="mono sub">${r[1]}</td><td class="mono sub">${r[2]}</td><td><span class="tag t-mesh">${r[3]}</span></td></tr>`)
+    ),null,true)}
+    ${panel('Entities MAMSYS mirrors but never edits', table(
+      [{t:'Entity'},{t:'Primary key'},{t:'Sync'}],
+      [['farmer','farmer_code','Daily pull, upsert'],
+       ['plot','plot_id','Daily pull'],
+       ['seed_issue','seed_issue_id','Event'],
+       ['lot','lot_barcode','Event, then immutable'],
+       ['lot_qc','lot_barcode + sample_no','Event'],
+       ['store_condition','store_id + timestamp','Daily rollup']
+      ].map(r=>`<tr><td class="mono">${r[0]}</td><td class="mono sub">${r[1]}</td><td class="sub">${r[2]}</td></tr>`)
+    ),null,true)}
+    <div class="spec"><b>Rule for MAMSYS:</b> a lot barcode is immutable once Cropin issues it. Splitting a lot across two plant dispatches creates child movements against the same barcode — never a new barcode. Farmer payment, freight, cold rent and landed cost all roll up on that one key.</div>`;
+
+    return `
+    ${panel('Requirement sheet \u2192 prototype screen', table(
+      [{t:'Sheet column'},{t:'Header'},{t:'Lands in'},{t:'Owner'}],
+      [
+        ['A','Contract farming / employee, attendance, expense, leave','Stage 01','Cropin'],
+        ['E\u2013G','Farmer level','Stage 02','Cropin'],
+        ['H\u2013J','Seed distribution','Stage 03','Cropin'],
+        ['K\u2013M','Sowing time, fertiliser, weather','Stage 04','Cropin'],
+        ['N\u2013AJ','10\u201320 to 70\u2013100 DAP, post-planting complaints','Stage 05','Cropin'],
+        ['AK\u2013AM','Leno bags management + transport management','Stages 06, 07','MAMSYS'],
+        ['AN\u2013AP','Cold store — potato dispatch, barcode, 5 samples','Stage 08','Cropin'],
+        ['AQ\u2013AW','Cold store monitoring — temp, RH, CO2, CIPC','Stage 09','Cropin'],
+        ['AX\u2013AZ','Plant level monitoring','Stage 11, gate receipt','Cropin QC, MAMSYS record'],
+        ['BA\u2013BC','Farmer billing','Stage 10','MAMSYS'],
+        ['BD\u2013BF','Dispatch to plant','Stage 11','MAMSYS'],
+        ['BG\u2013BH','Accounting and inventory','Stage 12','MAMSYS']
+      ].map(r=>`<tr><td class="mono">${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td>
+        <td><span class="tag ${r[3].indexOf('MAMSYS')===0?'t-mesh':'t-info'}">${r[3]}</span></td></tr>`)
+    ),'Sheet: POP Tracking, Sheet1 (2)',true)}
+    ${panel('Quality vocabulary used throughout', `<div class="grid g2">
+      <div>${table([{t:'Code'},{t:'Used as'},{t:'Prototype treatment'}],
+        [['UC','Frying sample parameter, %','Deduction driver via TPOD'],
+         ['DB','Frying sample parameter, %','Deduction driver via TPOD'],
+         ['ID','Frying sample parameter, %','Deduction driver via TPOD'],
+         ['ED','Frying sample parameter, %','Deduction driver via TPOD'],
+         ['TPOD','Total, %','Derived = UC + DB + ID + ED'],
+         ['Solid %','Dry matter, %','Incentive driver'],
+         ['Ex Fryer TPOD','Plant level, %','Recorded at gate receipt'],
+         ['FP Waste %','Plant level, %','Recorded at gate receipt']
+        ].map(r=>`<tr><td class="mono">${r[0]}</td><td class="sub">${r[1]}</td><td>${r[2]}</td></tr>`))}</div>
+      <div>${table([{t:'Physical defect'},{t:'Captured at'}],
+        [['Undersize','Intake + plant'],['Greening','Intake + plant'],['Dried bruise','Intake + plant'],
+         ['Black heart','Intake + plant'],['Growth crack','Intake + plant'],['Secondary growth','Intake + plant'],
+         ['Sprouting','Plant only'],['Soil','Plant only'],['Infestation','Plant only']
+        ].map(r=>`<tr><td>${r[0]}</td><td class="sub">${r[1]}</td></tr>`))}</div>
+    </div>`,null,false)}`;
+  }
+};
+
+/* ===================== Cropin upstream stages (read only) =============== */
+function cropinStage(desc, groups, payload, extraTitle, extra){
+  return {
+    desc, tabs: extra ? ['Fields captured', extraTitle, 'What MAMSYS receives'] : ['Fields captured','What MAMSYS receives'],
+    render(t){
+      const fields = `<div class="readonly">${panel('Captured in Cropin today', fieldList(groups),
+        'Straight from the requirement sheet')}</div>`;
+      const api = panel('Payload delivered to MAMSYS', code(payload),
+        'Pull on schedule, upsert on primary key');
+      if(extra){ return t===0?fields : t===1?extra() : api; }
+      return t===0?fields:api;
+    }
+  };
+}
+
+MOD.contract = cropinStage(
+  'Contract farming and the field team that runs it. Nothing here changes for MAMSYS — it is listed so the build team can see where the workforce cost in stage 12 comes from.',
+  [{t:'Workforce',f:['Employee management','Attendance','Leave management']},
+   {t:'Spend',f:['Expense management','Advance settlement']},
+   {t:'Output',f:['Reports','Territory mapping']}],
+  {season:'Rabi 2025-26', field_officers:14, villages_covered:38, contracted_acres:94,
+   note:'Expense totals post to MAMSYS cost head 7 — Other'}
+);
+
+MOD.farmer = cropinStage(
+  'Farmer registration, plot geo-tag and the contracted acreage. This is the master record every MAMSYS module keys against.',
+  [{t:'Identity',f:['Sr. no.','Name of farmer','Contact number *','Address','Village','Tehsil','District','State','Pin code']},
+   {t:'Plot',f:['Geo tag','Sowing acres','Date of planting','Date of harvesting']},
+   {t:'Practice',f:['Irrigation type — drip / sprinkler','Grading type — machine / manual','Seed booking','Seed dispatch record']}],
+  {farmer_code:'BW-DSA-0117', name:'Rameshbhai Patel', mobile:'98252 4XXXX', village:'Bhildi',
+   taluka:'Deesa', district:'Banaskantha', state:'Gujarat', pin:'385530',
+   geo:{lat:24.2571, lng:72.1904}, contract_acres:12, variety:'Chipsona-3',
+   planting_date:'2025-11-18', expected_harvest:'2026-03-01', irrigation:'Drip', grading:'Machine'},
+  null, null
+);
+
+MOD.seed = cropinStage(
+  'Seed booking and issue. Two fields from here drive money in stage 10 — the seed quantity that gets 50% recovered, and whether the farmer paid the 50% booking amount.',
+  [{t:'Header',f:['Village','Name of farmer','Farmer code','Variety']},
+   {t:'Seed quality',f:['Physical','Rottage','Size','Mix variety','Other']},
+   {t:'Commercial',f:['Seed quantity','Seed rate','50% booking amount paid','Balance recoverable']}],
+  {farmer_code:'BW-DSA-0117', variety:'Chipsona-3', seed_quintals:96, seed_rate_per_q:2600,
+   booking_50pct_paid:true, seed_bags_50kg:192,
+   quality:{physical:'OK', rottage_pct:0.4, size:'35\u201355 mm', mix_variety_pct:0.2},
+   note:'booking_50pct_paid = false triggers the \u20B9100 per seed bag penalty in farmer billing'}
+);
+
+MOD.sowing = cropinStage(
+  'Sowing, fertiliser plan and the weather feed. Agronomy only — no MAMSYS dependency beyond the planting date, which sets the DAP clock for leno bag planning.',
+  [{t:'Sowing',f:['Observation','Seed treatment','Soil temperature','Soil moisture','Bed size','Weather parameters']},
+   {t:'Fertiliser',f:['Basal dose','Top dressing','Fertigation schedule']},
+   {t:'Weather alerts',f:['Soil moisture','Temperature','Rainfall alert','Disease / pest alert','Other']}],
+  {farmer_code:'BW-DSA-0117', planting_date:'2025-11-18', bed_size:'60 cm', seed_treatment:'Applied',
+   soil_temp_c:19.4, soil_moisture_pct:26, fertigation_start:'2025-12-06'}
+);
+
+MOD.monitor = cropinStage(
+  'Seven scouting windows from 10 DAP to 100 DAP plus the post-planting complaint workflow. The one number MAMSYS needs is the revised expected yield — leno bag quantity and vehicle indent both size off it.',
+  [{t:'10\u201330 DAP',f:['Weedicide spray + date','Full irrigation date & hours','% germination','Fertigation start','Average tuber count','Plant count in 3 m \u00D7 3 spots']},
+   {t:'30\u2013100 DAP',f:['Visit observation','Scab','Nematode','Disease','Pest','No. of tuber & size','Location','Images 1\u20133','Alert']},
+   {t:'Complaints',f:['Good piece','Blind piece','Rottage piece','Not sprouted','Gapping %','Virus count \u00D7 3 spots','Sample pics','Verification status','Conclusion']}],
+  {farmer_code:'BW-DSA-0117', dap:82, germination_pct:94.2, avg_plant_count_3m:41,
+   expected_yield_mt_per_acre:12.5, expected_bags_50kg:3125, alerts:[], complaint_status:'None open',
+   note:'expected_bags_50kg is what leno bag distribution and the vehicle indent size against'}
+);
+
+MOD.intake = {
+  desc:'Cold store intake. Cropin weighs the vehicle in, generates the lot barcode and runs five frying samples. Everything MAMSYS calculates after this point is keyed on that barcode.',
+  tabs:['Intake register','Lot QC results','What MAMSYS receives'],
+  render(t){
+    if(t===0){
+      const rows = DB.lots.map(l=>{
+        const tr = DB.trips.find(x=>x.lot===l.id);
+        return `<tr><td>${lotChip(l.id)}</td><td>${fmr(l.code).name}<div class="sub mono">${l.code}</div></td>
+          <td>${l.variety}</td><td class="sub">${store(l.store).name.split(',')[0]}</td>
+          <td class="mono sub">${tr?tr.veh:'\u2014'}</td>
+          <td class="num">${l.bags.toLocaleString('en-IN')}</td>
+          <td class="num">${N(l.kg/1000)}</td>
+          <td class="num sub">${tr?N((tr.loadKg-tr.recvKg)/1000,3):'\u2014'}</td>
+          <td>${dmy(l.date)}</td></tr>`;}).join('');
+      return `${kpis([
+        {k:'Lots in store', v:DB.lots.length},
+        {k:'Bags received', v:DB.lots.reduce((s,l)=>s+l.bags,0).toLocaleString('en-IN')},
+        {k:'Weight received', v:N(DB.lots.reduce((s,l)=>s+l.kg,0)/1000,1), u:'MT'},
+        {k:'Transit shortage', v:N(DB.trips.filter(t=>t.recvKg).reduce((s,t)=>s+(t.loadKg-t.recvKg),0)/1000,3), u:'MT', n:'Loaded less received'}
+      ])}
+      <div class="readonly">${panel('Intake register', table(
+        [{t:'Lot barcode'},{t:'Farmer'},{t:'Variety'},{t:'Cold store'},{t:'Vehicle'},{t:'Bags',n:1},{t:'Received MT',n:1},{t:'Shortage MT',n:1},{t:'Date'}], [rows]
+      ),'Barcode auto-generated by Cropin at gate-in',true)}</div>
+      <div class="spec">Click any lot barcode anywhere in this prototype to open its passport — bags, freight, quality, farmer payment and landed cost for that one lot.</div>`;
+    }
+    if(t===1){
+      const rows = DB.lots.map(l=>{const q=l.qc,tp=tpod(q);
+        return `<tr><td>${lotChip(l.id)}</td>
+        <td class="num">${N(q.uc,1)}</td><td class="num">${N(q.db,1)}</td><td class="num">${N(q.id,1)}</td><td class="num">${N(q.ed,1)}</td>
+        <td class="num"><b>${qcFlag(tp,CFG.plantSpec.tpod)}${N(tp,1)}</b></td>
+        <td class="num">${N(q.solid,1)}</td>
+        <td class="num">${N(q.undersize,1)}</td><td class="num">${N(q.greening,1)}</td><td class="num">${N(q.bruise,1)}</td>
+        <td class="num">${N(q.black,1)}</td><td class="num">${N(q.crack,1)}</td><td class="num">${N(q.secondary,1)}</td>
+        <td class="num sub">${N(physTot(q),1)}</td></tr>`;}).join('');
+      return `<div class="readonly">${panel('Five-sample average per lot', table(
+        [{t:'Lot'},{t:'UC',n:1},{t:'DB',n:1},{t:'ID',n:1},{t:'ED',n:1},{t:'TPOD',n:1},{t:'Solid %',n:1},
+         {t:'Undersize',n:1},{t:'Greening',n:1},{t:'Dried bruise',n:1},{t:'Black heart',n:1},{t:'Growth crack',n:1},{t:'Secondary',n:1},{t:'Physical total',n:1}],
+        [rows]), 'All values in per cent', true)}</div>
+      <div class="note">TPOD above ${CFG.plantSpec.tpod}% fails the plant specification used in stage 11 and moves the lot into a higher deduction slab in stage 10. LOT-DSA-0134A is the worked example of a lot that fails both.</div>`;
+    }
+    return panel('Payload delivered to MAMSYS on every intake', code({
+      lot_barcode:'LOT-DSA-0134A', trip_id:'TRP-5003', farmer_code:'BW-DSA-0134', variety:'Chipsona-3',
+      cold_store_id:'CS-03', dispatched_bags:3820, dispatched_weight_kg:191000, received_weight_kg:190100,
+      intake_date:'2026-03-03', dispatcher:'Field officer — Lakhani',
+      qc:{samples:5, frying:{uc:3.2,db:2.4,id:2.8,ed:3.1,tpod:11.5,solid_pct:18.6},
+          physical:{undersize:9.4,greening:2.1,dried_bruise:2.6,black_heart:1.1,growth_crack:1.9,secondary_growth:1.4}}
+    }));
+  }
+};
+
+MOD.store = {
+  desc:'Cold store conditions and the CIPC application record. MAMSYS reads two things from here — storage days for cold rent, and the CIPC date, which sets the earliest dispatch date.',
+  tabs:['Store conditions','What MAMSYS receives'],
+  render(t){
+    if(t===0){
+      const cond = [
+        ['CS-01','2026-04-10','06:00',17.5,90,1110],['CS-01','2026-04-10','14:00',17.0,85,1220],['CS-01','2026-04-10','22:00',17.2,95,1400],
+        ['CS-02','2026-04-10','06:00',17.8,88,1050],['CS-02','2026-04-10','14:00',17.4,86,1180],
+        ['CS-03','2026-04-10','06:00',16.9,92,1310],['CS-03','2026-04-10','14:00',17.6,89,1495]
+      ].map(r=>`<tr><td class="mono">${r[0]}</td><td>${dmy(r[1])}</td><td class="mono">${r[2]}</td>
+        <td class="num">${N(r[3],1)}</td><td class="num">${r[4]}</td>
+        <td class="num">${qcFlag(r[5],1400)}${r[5]}</td></tr>`).join('');
+      const cipc = DB.cipc.map(c=>`<tr><td class="mono">${c.store}</td><td>${dmy(c.date)}</td>
+        <td class="num">${c.litres}</td><td class="num">${N(c.mt,1)}</td><td class="num">${INR(c.mt*CFG.cipcPerMT)}</td>
+        <td><span class="tag t-ok">Dispatch window open</span></td></tr>`).join('');
+      return `<div class="readonly">${panel('Condition log', table(
+        [{t:'Store'},{t:'Date'},{t:'Time'},{t:'Prod. temp \u00B0C',n:1},{t:'RH %',n:1},{t:'CO\u2082 ppm',n:1}],[cond]),'Sheet columns AQ\u2013AV',true)}</div>
+      ${panel('CIPC application', table(
+        [{t:'Store'},{t:'CIPC date'},{t:'Litres',n:1},{t:'MT treated',n:1},{t:'Cost',n:1},{t:'Effect'}],[cipc]),
+        'Cost posts to accounting head 5',true)}`;
+    }
+    return panel('Payload delivered to MAMSYS', code({
+      store_id:'CS-01', date:'2026-04-10', prod_temp_c:17.2, rh_pct:95, co2_ppm:1400,
+      cipc_applied_on:'2026-03-20', storage_days_by_lot:{'LOT-DSA-0117A':40,'LOT-DSA-0142A':37,'LOT-DSA-0156A':36},
+      note:'storage_days drives cold rent accrual; cipc_applied_on gates dispatch approval'
+    }));
+  }
+};
+/* ------------------- seed the awarded leno contract -------------------- */
+DB.lenoAward = 'LQ-01';
+DB.lenoPOs.push({id:'PO-8801', quote:'LQ-01', vendor:'Gujarat Mesh Industries, Rajkot', rate:15.90,
+                 bags:30000, date:'2026-01-28', store:'CS-01', status:'Part received'});
+DB.lenoGRNs.push({id:'GRN-9101', po:'PO-8801', vendor:'Gujarat Mesh Industries, Rajkot', bags:22000,
+                  rate:15.90, date:'2026-02-14', store:'CS-01'});
+
+/* ------------------------------ actions -------------------------------- */
+const ACT = {};
+document.addEventListener('click', e=>{
+  const a = e.target.closest('[data-act]');
+  if(a && ACT[a.dataset.act]) ACT[a.dataset.act](a);
+});
+const val = id => { const el=$('#'+id); return el ? el.value : ''; };
+const num = id => { const v=parseFloat(val(id)); return isNaN(v)?0:v; };
+const redraw = () => go(cur.stage, cur.tab);
+
+/* ============================ 06 LENO BAGS ============================== */
+MOD.leno = {
+  desc:'Buy the mesh bags, get them into store, issue them to farmers against expected production, and track every bag until it comes back full of potato. Unreturned bags become a deduction on the farmer bill in stage 10.',
+  tabs:['Vendor quotations','Purchase & GRN','Farmer distribution','Stock & balance'],
+  render(t){
+    const st = lenoStock();
+    if(t===0){
+      const need = FARMERS.reduce((s,f)=>s+bagsNeeded(f),0);
+      const rows = DB.lenoQuotes.map(q=>{
+        const won = DB.lenoAward===q.id;
+        return `<tr><td><input type="radio" name="award" value="${q.id}" ${won?'checked':''} style="width:auto" id="aw-${q.id}"></td>
+          <td><b>${q.vendor}</b><div class="sub mono">${q.id}</div></td>
+          <td class="num">${INR2(q.rate)}</td><td class="num">${q.gsm}</td>
+          <td class="num">${q.moq.toLocaleString('en-IN')}</td><td class="num">${q.days} d</td><td>${q.credit}</td>
+          <td class="num">${INR(q.rate*need)}</td>
+          <td>${won?'<span class="tag t-mesh">Awarded</span>':'<span class="tag t-mute">Quoted</span>'}</td></tr>`;
+      }).join('');
+      return `${kpis([
+        {k:'Bags required, season', v:need.toLocaleString('en-IN'), n:'Expected yield \u00F7 50 kg, all farmers'},
+        {k:'Awarded rate', v:INR2(CFG.lenoRate), u:'/bag', hi:true, n:DB.lenoQuotes.find(q=>q.id===DB.lenoAward).vendor.split(',')[0]},
+        {k:'Contract value', v:INR(need*CFG.lenoRate), n:'At awarded rate'},
+        {k:'Spread L1 to L3', v:INR2(DB.lenoQuotes[2].rate-DB.lenoQuotes[0].rate), u:'/bag', n:'Worth '+INR((DB.lenoQuotes[2].rate-DB.lenoQuotes[0].rate)*need)+' across the season'}
+      ])}
+      ${panel('Quotation comparison', table(
+        [{t:''},{t:'Vendor'},{t:'Rate /bag',n:1},{t:'GSM',n:1},{t:'MOQ',n:1},{t:'Lead time',n:1},{t:'Credit'},{t:'Season value',n:1},{t:'Status'}],
+        [rows]),'Select a vendor and award to see the rate flow into billing',true)}
+      <div class="panel"><div class="panel-b" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <button class="btn primary" data-act="lenoAward">Award rate contract</button>
+        <span class="sub">Awarding changes the bag rate used for farmer deductions in stage 10 and the leno cost head in stage 12. Try awarding a different vendor and check the numbers move.</span>
+      </div></div>
+      <div class="note"><b>Do not award on rate alone.</b> The 55 GSM quote is ${INR2(DB.lenoQuotes[2].rate-DB.lenoQuotes[0].rate)}/bag cheaper but has an 18-day lead time and a 50,000-bag MOQ. Build the comparison screen so a buyer can record why L1 was or was not taken — Balaji's audit will ask.</div>`;
+    }
+
+    if(t===1){
+      const po = DB.lenoPOs.map(p=>{
+        const recd = DB.lenoGRNs.filter(g=>g.po===p.id).reduce((s,g)=>s+g.bags,0);
+        return `<tr><td class="mono">${p.id}</td><td>${p.vendor}</td><td>${dmy(p.date)}</td>
+          <td class="num">${p.bags.toLocaleString('en-IN')}</td><td class="num">${recd.toLocaleString('en-IN')}</td>
+          <td class="num">${(p.bags-recd).toLocaleString('en-IN')}</td><td class="num">${INR(p.bags*p.rate)}</td>
+          <td><span class="tag ${recd>=p.bags?'t-ok':recd?'t-wait':'t-mute'}">${recd>=p.bags?'Closed':recd?'Part received':'Open'}</span></td></tr>`;}).join('');
+      const grn = DB.lenoGRNs.map(g=>`<tr><td class="mono">${g.id}</td><td class="mono sub">${g.po}</td>
+        <td>${dmy(g.date)}</td><td>${store(g.store).name.split(',')[0]}</td>
+        <td class="num">${g.bags.toLocaleString('en-IN')}</td><td class="num">${INR(g.bags*g.rate)}</td></tr>`).join('');
+      const open = DB.lenoPOs.filter(p=>DB.lenoGRNs.filter(g=>g.po===p.id).reduce((s,g)=>s+g.bags,0) < p.bags);
+      return `${panel('Purchase orders', table(
+        [{t:'PO'},{t:'Vendor'},{t:'Date'},{t:'Ordered',n:1},{t:'Received',n:1},{t:'Pending',n:1},{t:'Value',n:1},{t:'Status'}],[po]),null,true)}
+      <div class="split">
+        ${panel('Goods receipt', table(
+          [{t:'GRN'},{t:'Against PO'},{t:'Date'},{t:'Store'},{t:'Bags',n:1},{t:'Value',n:1}],[grn]),null,true)}
+        <section class="panel"><div class="panel-h"><h3>Record a receipt</h3></div><div class="panel-b">
+          <div class="fgrid">
+            <div class="field"><label>Against PO</label><select id="grn-po">${open.map(p=>`<option value="${p.id}">${p.id} \u00B7 ${p.bags.toLocaleString('en-IN')} bags</option>`).join('')||'<option>No open PO</option>'}</select></div>
+            <div class="field"><label>Bags received</label><input type="number" id="grn-bags" value="8000" min="1"></div>
+            <div class="field"><label>Into store</label><select id="grn-store">${STORES.map(s=>`<option value="${s.id}">${s.name.split(',')[0]}</option>`).join('')}</select></div>
+            <div class="field"><label>Receipt date</label><input type="date" id="grn-date" value="2026-02-25"></div>
+          </div>
+          <button class="btn primary" data-act="lenoGRN" ${open.length?'':'disabled'}>Record receipt</button>
+          <div class="rule"></div>
+          <div class="mini">Raise a fresh PO on the awarded contract</div>
+          <div class="fgrid" style="margin-top:8px">
+            <div class="field"><label>Bags to order</label><input type="number" id="po-bags" value="12000" min="1"></div>
+            <div class="field"><label>Delivery store</label><select id="po-store">${STORES.map(s=>`<option value="${s.id}">${s.name.split(',')[0]}</option>`).join('')}</select></div>
+          </div>
+          <button class="btn ghost" data-act="lenoPO">Raise purchase order</button>
+        </div></section>
+      </div>`;
+    }
+
+    if(t===2){
+      const rows = FARMERS.map(f=>{
+        const b = lenoBalance(f.code), need = bagsNeeded(f);
+        const cov = b.issued/need*100;
+        return `<tr><td><b>${f.name}</b><div class="sub mono">${f.code} \u00B7 ${f.village}</div></td>
+          <td class="num">${f.acres}</td><td class="num">${N(f.yld,1)}</td>
+          <td class="num">${need.toLocaleString('en-IN')}</td>
+          <td class="num">${b.issued.toLocaleString('en-IN')}</td>
+          <td class="num">${cov<80?`<span class="tag t-wait">${N(cov,0)}%</span>`:`<span class="tag t-ok">${N(cov,0)}%</span>`}</td>
+          <td class="num">${b.used.toLocaleString('en-IN')}</td><td class="num">${b.ret}</td>
+          <td class="num"><b>${b.open.toLocaleString('en-IN')}</b></td>
+          <td class="num">${b.open>0?INR(b.open*CFG.lenoRate):'\u2014'}</td></tr>`;}).join('');
+      return `${panel('Issue bags to a farmer', `
+        <div class="fgrid">
+          <div class="field"><label>Farmer</label><select id="li-farmer">${FARMERS.map(f=>`<option value="${f.code}">${f.name} \u00B7 ${f.village}</option>`).join('')}</select></div>
+          <div class="field"><label>Bags to issue</label><input type="number" id="li-bags" value="1500" min="1"></div>
+          <div class="field"><label>From store</label><select id="li-store">${STORES.map(s=>`<option value="${s.id}">${s.name.split(',')[0]}</option>`).join('')}</select></div>
+          <div class="field"><label>Issue date</label><input type="date" id="li-date" value="2026-02-26"></div>
+          <div class="field" style="display:flex;align-items:flex-end"><button class="btn primary" data-act="lenoIssue" style="width:100%">Issue bags</button></div>
+        </div>
+        <div class="fgrid" style="margin-top:4px">
+          <div class="field"><label>Empties returned by</label><select id="lr-farmer">${FARMERS.map(f=>`<option value="${f.code}">${f.name}</option>`).join('')}</select></div>
+          <div class="field"><label>Bags returned</label><input type="number" id="lr-bags" value="50" min="1"></div>
+          <div class="field" style="display:flex;align-items:flex-end"><button class="btn ghost" data-act="lenoReturn" style="width:100%">Record return</button></div>
+        </div>
+        <div class="mini">Free stock available: <b>${st.closing.toLocaleString('en-IN')}</b> bags</div>`)}
+      ${panel('Farmer-wise bag account', table(
+        [{t:'Farmer'},{t:'Acres',n:1},{t:'Yield MT/ac',n:1},{t:'Bags needed',n:1},{t:'Issued',n:1},{t:'Coverage',n:1},{t:'Came back full',n:1},{t:'Empties back',n:1},{t:'Unaccounted',n:1},{t:'Recoverable',n:1}],
+        [rows]),'Unaccounted = issued \u2212 returned empty \u2212 bags delivered with potato',true)}
+      <div class="note"><b>This is where the deduction is born.</b> A bag issued is a bag the company paid for. It is settled either by coming back full of potato at intake, or by coming back empty. Anything left over is recovered on the farmer bill at ${INR2(CFG.lenoRate)} per bag.</div>`;
+    }
+
+    const led = [
+      ['Opening stock', 0], ['Received against GRN', st.rec], ['Issued to farmers', -st.iss],
+      ['Empties returned', st.ret], ['Damaged / written off', 0]
+    ].map(r=>`<tr><td class="txt">${r[0]}</td><td class="num">${r[1]===0?'\u2014':r[1].toLocaleString('en-IN')}</td></tr>`).join('');
+    const byStore = STORES.map(s=>{
+      const rec = DB.lenoGRNs.filter(g=>g.store===s.id).reduce((a,g)=>a+g.bags,0);
+      const iss = DB.lenoIssues.filter(i=>i.store===s.id).reduce((a,i)=>a+i.bags,0);
+      return `<tr><td class="txt">${s.name}</td><td class="num">${rec.toLocaleString('en-IN')}</td>
+        <td class="num">${iss.toLocaleString('en-IN')}</td><td class="num">${(rec-iss).toLocaleString('en-IN')}</td></tr>`;}).join('');
+    const openBags = FARMERS.reduce((s,f)=>s+Math.max(0,lenoBalance(f.code).open),0);
+    return `${kpis([
+      {k:'Received', v:st.rec.toLocaleString('en-IN'), n:'All GRNs this season'},
+      {k:'Issued', v:st.iss.toLocaleString('en-IN')},
+      {k:'Closing stock', v:st.closing.toLocaleString('en-IN'), hi:true, u:'bags'},
+      {k:'With farmers, unaccounted', v:openBags.toLocaleString('en-IN'), n:'Recoverable '+INR(openBags*CFG.lenoRate)}
+    ])}
+    <div class="split">
+      ${panel('Season stock ledger', `<table class="ledger"><tbody>${led}</tbody>
+        <tfoot><tr><td class="txt">Closing stock</td><td class="num">${st.closing.toLocaleString('en-IN')}</td></tr></tfoot></table>`,null,true)}
+      ${panel('Store-wise position', table([{t:'Store'},{t:'Received',n:1},{t:'Issued',n:1},{t:'On hand',n:1}],[byStore]),null,true)}
+    </div>
+    <div class="spec"><b>Build note.</b> Bag stock is a two-level ledger — company stock in the store, and bags on loan with each farmer. Keep them as separate accounts. A single running total will not reconcile once returns and part deliveries start, and Balaji's finance team reconciles this against the PO value at season close.</div>`;
+  }
+};
+
+ACT.lenoAward = () => {
+  const sel = $$('input[name=award]').find(r=>r.checked); if(!sel) return;
+  DB.lenoAward = sel.value;
+  const q = DB.lenoQuotes.find(x=>x.id===sel.value);
+  CFG.lenoRate = q.rate;
+  toast(`Rate contract awarded to ${q.vendor.split(',')[0]} at ${INR2(q.rate)} a bag`);
+  redraw();
+};
+ACT.lenoPO = () => {
+  const bags = num('po-bags'); if(bags<=0) return toast('Enter the number of bags to order');
+  const q = DB.lenoQuotes.find(x=>x.id===DB.lenoAward);
+  DB.lenoPOs.push({id:uid('PO'), quote:q.id, vendor:q.vendor, rate:q.rate, bags, date:'2026-02-25', store:val('po-store'), status:'Open'});
+  toast(`Purchase order raised for ${bags.toLocaleString('en-IN')} bags`); redraw();
+};
+ACT.lenoGRN = () => {
+  const bags = num('grn-bags'), po = val('grn-po');
+  if(bags<=0) return toast('Enter the bags received');
+  const p = DB.lenoPOs.find(x=>x.id===po); if(!p) return;
+  const already = DB.lenoGRNs.filter(g=>g.po===po).reduce((s,g)=>s+g.bags,0);
+  if(already+bags > p.bags) return toast(`Receipt exceeds the PO by ${(already+bags-p.bags).toLocaleString('en-IN')} bags`);
+  DB.lenoGRNs.push({id:uid('GRN'), po, vendor:p.vendor, bags, rate:p.rate, date:val('grn-date')||'2026-02-25', store:val('grn-store')});
+  toast(`${bags.toLocaleString('en-IN')} bags received into stock`); redraw();
+};
+ACT.lenoIssue = () => {
+  const bags = num('li-bags'), code = val('li-farmer');
+  if(bags<=0) return toast('Enter the bags to issue');
+  if(bags > lenoStock().closing) return toast(`Only ${lenoStock().closing.toLocaleString('en-IN')} bags in stock`);
+  DB.lenoIssues.push({id:uid('LI'), code, bags, date:val('li-date')||'2026-02-26', store:val('li-store')});
+  toast(`${bags.toLocaleString('en-IN')} bags issued to ${fmr(code).name}`); redraw();
+};
+ACT.lenoReturn = () => {
+  const bags = num('lr-bags'), code = val('lr-farmer');
+  if(bags<=0) return toast('Enter the bags returned');
+  DB.lenoReturns.push({code, bags});
+  toast(`${bags} empty bags returned by ${fmr(code).name}`); redraw();
+};
+
+/* ========================== 07 TRANSPORT =============================== */
+MOD.transport = {
+  desc:'Rate contracts by route, vehicle allocation against a harvest indent, the trip itself, and the freight bill. Two legs run through here — field to cold store at harvest, and cold store to plant year-round.',
+  tabs:['Rate contracts','Vehicle indent','Trips & LR','Freight bills'],
+  render(t){
+    if(t===0){
+      const rows = DB.transRates.map(r=>`<tr>
+        <td><b>${r.transporter}</b><div class="sub mono">${r.id}</div></td><td>${r.veh}</td>
+        <td class="num">${INR(r.field)}</td>
+        ${PLANTS.map(p=>`<td class="num">${INR(r.plant[p])}</td>`).join('')}
+        <td>${r.awarded?'<span class="tag t-mesh">Awarded</span>':'<span class="tag t-mute">Quoted</span>'}</td>
+        <td><button class="btn sm ghost" data-act="transToggle" data-id="${r.id}">${r.awarded?'Withdraw':'Award'}</button></td></tr>`).join('');
+      return `${panel('Route rate card', table(
+        [{t:'Transporter'},{t:'Vehicle'},{t:'Field \u2192 store /MT',n:1},...PLANTS.map(p=>({t:'\u2192 '+p+' /MT',n:1})),{t:'Status'},{t:''}],
+        [rows]),'Rates in \u20B9 per MT',true)}
+      <div class="grid g3">
+        ${STORES.map(s=>`<section class="panel"><div class="panel-b">
+          <div class="mini" style="letter-spacing:.1em;text-transform:uppercase">${s.id}</div>
+          <div style="font-weight:600;margin:2px 0 8px">${s.name}</div>
+          ${PLANTS.map(p=>`<div class="kv"><span class="k">${p}</span><span class="v">${s.km[p]} km</span></div>`).join('')}
+        </div></section>`).join('')}
+      </div>
+      <div class="note"><b>Two rate types, one screen.</b> Field-to-store is short-haul, priced per MT and settled per trip. Store-to-plant is long-haul, priced per MT per destination and settled against the dispatch challan. Both must reference the same awarded contract, or freight reconciliation at season close will not tie out.</div>`;
+    }
+
+    if(t===1){
+      const rows = DB.indents.map(i=>{
+        const f = fmr(i.code);
+        return `<tr><td class="mono">${i.id}</td><td><b>${f.name}</b><div class="sub mono">${i.code} \u00B7 ${f.village}</div></td>
+          <td>${dmy(i.date)}</td><td class="num">${i.bags.toLocaleString('en-IN')}</td>
+          <td class="num">${N(i.bags*CFG.bagKg/1000,1)}</td><td>${store(i.store).name.split(',')[0]}</td>
+          <td><span class="tag ${i.status==='Open'?'t-wait':'t-ok'}">${i.status}</span></td>
+          <td>${i.trip?`<span class="mono sub">${i.trip}</span>`:''}</td></tr>`;}).join('');
+      const open = DB.indents.filter(i=>i.status==='Open');
+      const aw = DB.transRates.filter(r=>r.awarded);
+      return `${panel('Harvest indents', table(
+        [{t:'Indent'},{t:'Farmer'},{t:'Pickup date'},{t:'Bags',n:1},{t:'Est. MT',n:1},{t:'Deliver to'},{t:'Status'},{t:'Trip'}],[rows]),
+        'Raised by the field officer once harvest date is confirmed in Cropin',true)}
+      <div class="split">
+        <section class="panel"><div class="panel-h"><h3>Allocate a vehicle</h3><span class="hint">${open.length} open indent${open.length===1?'':'s'}</span></div><div class="panel-b">
+          <div class="fgrid">
+            <div class="field"><label>Indent</label><select id="al-ind">${open.map(i=>`<option value="${i.id}">${i.id} \u00B7 ${fmr(i.code).name}</option>`).join('')||'<option>None open</option>'}</select></div>
+            <div class="field"><label>Transporter</label><select id="al-tr">${aw.map(r=>`<option value="${r.transporter}">${r.transporter} \u00B7 ${r.veh.split(' \u00B7 ')[0]}</option>`).join('')}</select></div>
+            <div class="field"><label>Vehicle number</label><input id="al-veh" value="GJ-08-AT-4412"></div>
+            <div class="field"><label>Driver name</label><input id="al-drv" value="Ishwarbhai Rabari"></div>
+            <div class="field"><label>Driver mobile</label><input id="al-mob" value="98252 41180"></div>
+          </div>
+          <button class="btn primary" data-act="allocate" ${open.length?'':'disabled'}>Allocate vehicle</button>
+        </div></section>
+        <section class="panel"><div class="panel-h"><h3>Raise an indent</h3></div><div class="panel-b">
+          <div class="fgrid">
+            <div class="field"><label>Farmer</label><select id="in-farmer">${FARMERS.map(f=>`<option value="${f.code}">${f.name} \u00B7 ${f.village}</option>`).join('')}</select></div>
+            <div class="field"><label>Bags to lift</label><input type="number" id="in-bags" value="2000" min="1"></div>
+            <div class="field"><label>Deliver to</label><select id="in-store">${STORES.map(s=>`<option value="${s.id}">${s.name.split(',')[0]}</option>`).join('')}</select></div>
+            <div class="field"><label>Pickup date</label><input type="date" id="in-date" value="2026-03-08"></div>
+          </div>
+          <button class="btn ghost" data-act="indent">Raise indent</button>
+        </div></section>
+      </div>`;
+    }
+
+    if(t===2){
+      const rows = DB.trips.map(tr=>{
+        const sh = tr.recvKg? (tr.loadKg-tr.recvKg)/1000 : null;
+        const btn = tr.status==='Allocated' ? `<button class="btn sm" data-act="tripLoad" data-id="${tr.id}">Mark loaded</button>`
+                  : tr.status==='In transit' ? `<button class="btn sm primary" data-act="tripUnload" data-id="${tr.id}">Unload at store</button>`
+                  : `<span class="tag t-ok">Closed</span>`;
+        return `<tr><td class="mono">${tr.id}</td>
+          <td>${fmr(tr.code).name}<div class="sub mono">${tr.code}</div></td>
+          <td>${tr.transporter}<div class="sub mono">${tr.veh}</div></td>
+          <td>${tr.driver}<div class="sub mono">${tr.mob}</div></td>
+          <td>${store(tr.store).name.split(',')[0]}</td>
+          <td class="num">${tr.bags.toLocaleString('en-IN')}</td>
+          <td class="num">${N(tr.loadKg/1000,2)}</td>
+          <td class="num">${tr.recvKg?N(tr.recvKg/1000,2):'\u2014'}</td>
+          <td class="num">${sh!==null?`${qcFlag(sh,0.5)}${N(sh,3)}`:'\u2014'}</td>
+          <td>${tr.lot?lotChip(tr.lot):'<span class="tag t-wait">Awaiting intake</span>'}</td>
+          <td>${btn}</td></tr>`;}).join('');
+      return `${kpis([
+        {k:'Trips this season', v:DB.trips.length},
+        {k:'MT moved to store', v:N(DB.trips.reduce((s,t)=>s+(t.recvKg||0),0)/1000,1), u:'MT'},
+        {k:'In transit', v:DB.trips.filter(t=>t.status!=='Unloaded').length, hi:true},
+        {k:'Total transit shortage', v:N(DB.trips.filter(t=>t.recvKg).reduce((s,t)=>s+(t.loadKg-t.recvKg),0)/1000,3), u:'MT', n:'Recovered from transporter above 0.5%'}
+      ])}
+      ${panel('Trip sheet', table(
+        [{t:'Trip'},{t:'Farmer'},{t:'Transporter'},{t:'Driver'},{t:'Store'},{t:'Bags',n:1},{t:'Loaded MT',n:1},{t:'Received MT',n:1},{t:'Shortage MT',n:1},{t:'Lot'},{t:''}],
+        [rows]),'Unloading creates the lot barcode in Cropin and unlocks billing',true)}
+      <div class="spec"><b>Build note.</b> The trip is the bridge between two systems. MAMSYS owns it up to the cold store gate; Cropin takes over at weigh-in and returns the lot barcode. Store the barcode on the trip record — it is the only way to trace freight cost back to a specific lot in stage 12.</div>`;
+    }
+
+    const rows = DB.trips.filter(t=>t.status==='Unloaded').map(tr=>{
+      const paid = DB.freightBills.find(b=>b.trip===tr.id);
+      const amt = freightField(tr);
+      return `<tr><td class="mono">${tr.id}</td><td>${tr.transporter}</td><td>Field \u2192 ${store(tr.store).name.split(',')[0]}</td>
+        <td class="num">${N((tr.recvKg||tr.loadKg)/1000,2)}</td>
+        <td class="num">${INR(DB.transRates.find(r=>r.transporter===tr.transporter).field)}</td>
+        <td class="num"><b>${INR(amt)}</b></td>
+        <td>${paid?'<span class="tag t-ok">Approved</span>':'<span class="tag t-wait">Pending</span>'}</td>
+        <td>${paid?'':`<button class="btn sm ghost" data-act="freightOk" data-id="${tr.id}">Approve</button>`}</td></tr>`;}).join('');
+    const dsp = DB.dispatches.map(d=>`<tr><td class="mono">${d.id}</td><td>${d.transporter}</td>
+      <td>${store(d.store).name.split(',')[0]} \u2192 ${d.plant}</td>
+      <td class="num">${N(d.kg/1000,2)}</td>
+      <td class="num">${INR(DB.transRates.find(r=>r.transporter===d.transporter).plant[d.plant])}</td>
+      <td class="num"><b>${INR(freightPlant(d))}</b></td><td><span class="tag t-info">On challan</span></td><td></td></tr>`).join('');
+    const tot = DB.trips.filter(t=>t.status==='Unloaded').reduce((s,t)=>s+freightField(t),0)
+              + DB.dispatches.reduce((s,d)=>s+freightPlant(d),0);
+    return `${panel('Freight bills', table(
+      [{t:'Reference'},{t:'Transporter'},{t:'Route'},{t:'MT',n:1},{t:'Rate /MT',n:1},{t:'Amount',n:1},{t:'Status'},{t:''}],
+      [rows+dsp],
+      `<tr><td colspan="5">Total freight, season to date</td><td class="num">${INR(tot)}</td><td colspan="2"></td></tr>`
+    ),'Posts to accounting head 2 — Transportation',true)}
+    <div class="note">Freight is computed from the awarded rate card and the weight actually received, never the weight loaded. That single rule is what makes transit shortage the transporter's problem rather than a silent cost in the potato price.</div>`;
+  }
+};
+
+ACT.transToggle = a => { const r = DB.transRates.find(x=>x.id===a.dataset.id); r.awarded=!r.awarded;
+  toast(`${r.transporter} ${r.awarded?'awarded':'withdrawn'}`); redraw(); };
+ACT.indent = () => {
+  const bags = num('in-bags'); if(bags<=0) return toast('Enter the bags to lift');
+  DB.indents.push({id:uid('IND'), code:val('in-farmer'), date:val('in-date')||'2026-03-08', bags, store:val('in-store'), status:'Open', trip:null});
+  toast('Indent raised'); redraw();
+};
+ACT.allocate = () => {
+  const i = DB.indents.find(x=>x.id===val('al-ind')); if(!i) return;
+  const id = uid('TRP');
+  DB.trips.push({id, indent:i.id, code:i.code, transporter:val('al-tr'), veh:val('al-veh'), driver:val('al-drv'), mob:val('al-mob'),
+                 store:i.store, bags:i.bags, loadKg:0, recvKg:0, date:i.date, status:'Allocated', lot:null});
+  i.status='Allocated'; i.trip=id;
+  toast(`${val('al-veh')} allocated \u00B7 trip ${id}`); go('transport',2);
+};
+ACT.tripLoad = a => {
+  const tr = DB.trips.find(t=>t.id===a.dataset.id);
+  tr.loadKg = tr.bags*CFG.bagKg; tr.status='In transit';
+  toast(`Loaded ${N(tr.loadKg/1000,2)} MT \u00B7 in transit to ${store(tr.store).name.split(',')[0]}`); redraw();
+};
+ACT.tripUnload = a => {
+  const tr = DB.trips.find(t=>t.id===a.dataset.id);
+  const shrink = 0.002 + Math.random()*0.004;
+  tr.recvKg = Math.round(tr.loadKg*(1-shrink));
+  tr.status = 'Unloaded';
+  const f = fmr(tr.code);
+  const lotId = 'LOT-DSA-'+tr.code.slice(-4)+String.fromCharCode(65+DB.lots.filter(l=>l.code===tr.code).length);
+  const r = (a,b)=>+(a+Math.random()*(b-a)).toFixed(1);
+  DB.lots.push({id:lotId, code:tr.code, variety:f.variety, store:tr.store,
+    bags:Math.round(tr.recvKg/CFG.bagKg), kg:tr.recvKg, out:0, date:tr.date, status:'In store',
+    qc:{uc:r(1,3),db:r(0.6,2.2),id:r(0.8,2.6),ed:r(1,3),solid:r(18.4,21.8),
+        undersize:r(3,9),greening:r(0.3,2),bruise:r(0.8,2.5),black:r(0.2,1),crack:r(0.5,1.8),secondary:r(0.3,1.3)}});
+  tr.lot = lotId;
+  toast(`Lot ${lotId} created \u00B7 QC returned by Cropin`); redraw();
+};
+ACT.freightOk = a => { const tr = DB.trips.find(t=>t.id===a.dataset.id);
+  DB.freightBills.push({id:uid('FB'), trip:tr.id, amt:freightField(tr)});
+  toast(`Freight bill approved \u00B7 ${INR(freightField(tr))}`); redraw(); };
+/* =========================== 10 FARMER BILLING ========================== */
+let billFarmer = FARMERS[0].code;
+
+MOD.billing = {
+  desc:'One worksheet per farmer. Gross is weight times the contracted buy-back rate; everything after that is a deduction or an addition that has to be traceable to a document. Nothing here is typed twice — weight and quality come from the lot, bags from stage 06, seed from Cropin.',
+  tabs:['Bill worksheet','Approval queue','Payment advice','Rate & deduction rules'],
+  render(t){
+    if(t===0){
+      const b = buildBill(billFarmer);
+      if(!b) return panel('Bill worksheet','<div class="sub">No lot received for this farmer yet. Complete a trip in stage 07 first.</div>');
+      const A = DB.adj[billFarmer]||{other:0,comp:0};
+      const dedRows = b.ded.map(d=>`<tr><td>${d.k}<div class="sub">${d.n}</div></td>
+        <td class="num">${d.v?('\u2212 '+INR(d.v)):'\u2014'}</td></tr>`).join('');
+      const addRows = b.add.map(d=>`<tr><td>${d.k}<div class="sub">${d.n}</div></td>
+        <td class="num">${d.v?('+ '+INR(d.v)):'\u2014'}</td></tr>`).join('');
+      const lotRows = b.lots.map(l=>`<tr><td>${lotChip(l.id)}</td><td>${dmy(l.date)}</td>
+        <td>${store(l.store).name.split(',')[0]}</td><td class="num">${l.bags.toLocaleString('en-IN')}</td>
+        <td class="num">${N(l.kg/1000,3)}</td><td class="num">${N(tpod(l.qc),1)}</td><td class="num">${N(l.qc.solid,1)}</td></tr>`).join('');
+      return `
+      <section class="panel"><div class="panel-b" style="display:flex;gap:14px;align-items:flex-end;flex-wrap:wrap">
+        <div class="field" style="margin:0;min-width:250px"><label>Farmer</label>
+          <select id="bf">${FARMERS.map(f=>`<option value="${f.code}" ${f.code===billFarmer?'selected':''}>${f.name} \u00B7 ${f.village} \u00B7 ${f.code}</option>`).join('')}</select></div>
+        <div class="mini">Contract ${b.f.acres} acres \u00B7 ${b.f.variety} \u00B7 buy-back ${INR(b.rate)}/MT</div>
+        <div style="margin-left:auto"><span class="tag ${b.status==='Paid'?'t-ok':b.status==='Approved'?'t-info':b.status==='Pending approval'?'t-wait':'t-mute'}">${b.status}</span></div>
+      </div></section>
+      ${kpis([
+        {k:'Weight accepted', v:N(b.mt,3), u:'MT'},
+        {k:'Gross value', v:INR(b.gross)},
+        {k:'Deductions', v:'\u2212 '+INR(b.dedT), n:N(b.dedT/b.gross*100,1)+'% of gross'},
+        {k:'Net payable', v:INR(b.net), hi:true, n:INR(b.net/b.mt)+' per MT realised'}
+      ])}
+      <div class="split">
+        <div class="stack">
+          ${panel('Deductions', `<table class="dedn"><tbody>${dedRows}</tbody>
+            <tfoot><tr><td>Total deductions</td><td class="num">\u2212 ${INR(b.dedT)}</td></tr></tfoot></table>`,null,true)}
+          ${panel('Additions', `<table class="dedn"><tbody>${addRows}</tbody>
+            <tfoot><tr><td>Total additions</td><td class="num">+ ${INR(b.addT)}</td></tr></tfoot></table>`,null,true)}
+          ${panel('Manual adjustments', `<div class="fgrid">
+            <div class="field"><label>Other deduction \u20B9</label><input type="number" id="ad-other" value="${A.other||0}"></div>
+            <div class="field"><label>Compensation \u20B9</label><input type="number" id="ad-comp" value="${A.comp||0}"></div>
+            <div class="field" style="display:flex;align-items:flex-end"><button class="btn ghost" data-act="applyAdj" style="width:100%">Apply</button></div>
+          </div><div class="mini">Both need a reason code and an approver in the real build. Compensation settles a verified post-planting complaint from stage 05.</div>`)}
+        </div>
+        <div class="stack">
+          <section class="panel"><div class="panel-h"><h3>Settlement</h3></div><div class="panel-b">
+            <div class="kv"><span class="k">Gross ${N(b.mt,3)} MT \u00D7 ${INR(b.rate)}</span><span class="v">${INR(b.gross)}</span></div>
+            <div class="kv"><span class="k">Less deductions</span><span class="v">\u2212 ${INR(b.dedT)}</span></div>
+            <div class="kv"><span class="k">Add incentives</span><span class="v">+ ${INR(b.addT)}</span></div>
+            <div class="rule"></div>
+            <div class="mini">NET PAYABLE TO FARMER</div>
+            <div class="big-money">${INR(b.net)}</div>
+            <div class="sub">${INR(b.net/b.mt)} per MT against a contracted ${INR(b.rate)} per MT</div>
+            <div class="rule"></div>
+            ${b.status==='Draft'
+              ? `<button class="btn primary" data-act="raiseBill" style="width:100%">Raise bill for approval</button>`
+              : `<div class="tag ${b.status==='Paid'?'t-ok':'t-info'}">${b.status}</div>`}
+          </div></section>
+          ${panel('Lots in this bill', table(
+            [{t:'Lot'},{t:'Date'},{t:'Store'},{t:'Bags',n:1},{t:'MT',n:1},{t:'TPOD',n:1},{t:'Solid',n:1}],[lotRows]),null,true)}
+        </div>
+      </div>
+      <div class="note"><b>Every line must be defensible to the farmer standing at the counter.</b> Print the bill with the source reference against each deduction — lot barcode for quality, issue slip number for bags, seed dispatch note for recovery. A deduction a field officer cannot explain is a deduction that gets reversed.</div>`;
+    }
+
+    if(t===1){
+      const rows = allBills().map(b=>`<tr>
+        <td><b>${b.f.name}</b><div class="sub mono">${b.code}</div></td>
+        <td class="num">${N(b.mt,2)}</td><td class="num">${INR(b.gross)}</td>
+        <td class="num">\u2212 ${INR(b.dedT)}</td><td class="num">+ ${INR(b.addT)}</td>
+        <td class="num"><b>${INR(b.net)}</b></td>
+        <td><span class="tag ${b.status==='Paid'?'t-ok':b.status==='Approved'?'t-info':b.status==='Pending approval'?'t-wait':'t-mute'}">${b.status}</span></td>
+        <td class="row-actions">
+          ${b.status==='Draft'?`<button class="btn sm ghost" data-act="raiseBill" data-code="${b.code}">Raise</button>`:''}
+          ${b.status==='Pending approval'?`<button class="btn sm" data-act="approveBill" data-code="${b.code}">Approve</button>`:''}
+          ${b.status==='Approved'?`<button class="btn sm primary" data-act="payBill" data-code="${b.code}">Release payment</button>`:''}
+        </td></tr>`).join('');
+      const tot = allBills().reduce((s,b)=>s+b.net,0);
+      const pend = allBills().filter(b=>b.status!=='Paid').reduce((s,b)=>s+b.net,0);
+      return `${kpis([
+        {k:'Bills in season', v:allBills().length},
+        {k:'Net payable, all bills', v:INR(tot)},
+        {k:'Not yet paid', v:INR(pend), hi:true},
+        {k:'Average realisation', v:INR(tot/allBills().reduce((s,b)=>s+b.mt,0)), u:'/MT'}
+      ])}
+      ${panel('Approval queue', table(
+        [{t:'Farmer'},{t:'MT',n:1},{t:'Gross',n:1},{t:'Deductions',n:1},{t:'Additions',n:1},{t:'Net',n:1},{t:'Status'},{t:''}],[rows]),
+        'Field officer raises \u2192 area manager approves \u2192 finance releases',true)}
+      <div class="spec"><b>Build note.</b> Three roles, three states, and no skipping. Balaji will want a maker-checker trail on every bill because the deductions are contested more often than the rate is.</div>`;
+    }
+
+    if(t===2){
+      const paid = allBills().filter(b=>b.status==='Paid');
+      if(!paid.length) return `${panel('Payment advice','<div class="sub">No bill released yet. Approve and release one in the queue to generate an advice.</div>')}`;
+      const rows = paid.map(b=>`<tr><td class="mono">${b.bill.advice}</td><td>${b.f.name}<div class="sub mono">${b.code}</div></td>
+        <td class="mono sub">${b.bill.acct}</td><td class="num">${N(b.mt,2)}</td><td class="num"><b>${INR(b.net)}</b></td>
+        <td class="mono sub">${b.bill.utr}</td><td>${dmy(b.bill.date)}</td></tr>`).join('');
+      return `${panel('Payment advice register', table(
+        [{t:'Advice no.'},{t:'Farmer'},{t:'Account'},{t:'MT',n:1},{t:'Amount',n:1},{t:'UTR'},{t:'Date'}],[rows],
+        `<tr><td colspan="4">Released</td><td class="num">${INR(paid.reduce((s,b)=>s+b.net,0))}</td><td colspan="2"></td></tr>`),
+        'File format for the bank upload sits behind this screen',true)}
+      <div class="note">Push the settlement status back to Cropin as soon as the UTR lands, so the farmer sees it in the app he already uses. Two apps telling a farmer two different things about his money is the fastest way to lose the contract.</div>`;
+    }
+
+    return `<div class="split">
+      ${panel('Quality deduction slab', table([{t:'TPOD %'},{t:'Band'},{t:'Deduction /MT',n:1}],
+        [CFG.qcSlab.map((s,i)=>`<tr><td class="mono">${i===0?'0':CFG.qcSlab[i-1].upto}\u2013${s.upto===99?'\u221E':s.upto}</td><td>${s.label}</td><td class="num">${s.rate?INR(s.rate):'Nil'}</td></tr>`).join('')]),null,true)}
+      ${panel('Solids incentive', table([{t:'Solid %'},{t:'Incentive /MT',n:1}],
+        [CFG.solidIncentive.map((s,i)=>`<tr><td class="mono">${s.min?('\u2265 '+s.min):'Below 19.5'}</td><td class="num">${s.rate?INR(s.rate):'Nil'}</td></tr>`).join('')]),null,true)}
+    </div>
+    ${panel('Standing rates', table([{t:'Parameter'},{t:'Value'},{t:'Applied as'}],
+      [[['Buy-back \u2014 Chipsona-3', INR(RATE['Chipsona-3'])+'/MT','Gross value'],
+        ['Buy-back \u2014 Chipsona-1', INR(RATE['Chipsona-1'])+'/MT','Gross value'],
+        ['Buy-back \u2014 Lady Rosetta', INR(RATE['Lady Rosetta'])+'/MT','Gross value'],
+        ['Buy-back \u2014 Santana', INR(RATE['Santana'])+'/MT','Gross value'],
+        ['Seed rate', INR(CFG.seedRate)+'/quintal','50% recovered at billing'],
+        ['Seed booking penalty', INR(CFG.seedPenalty)+'/seed bag','Only if 50% was not paid at booking'],
+        ['Leno bag rate', INR2(CFG.lenoRate)+'/bag','Unaccounted bags recovered'],
+        ['Harvest labour', INR(CFG.labourPerBag)+'/bag','Only where company arranged labour']
+       ].map(r=>`<tr><td>${r[0]}</td><td class="mono">${r[1]}</td><td class="sub">${r[2]}</td></tr>`).join('')]),
+      'Season master \u2014 versioned, never edited in place',true)}
+    <div class="note q"><b>Confirm with Balaji before build.</b> The slabs above are placeholders built to make the arithmetic visible. Get the real TPOD bands, the incentive basis, and whether deduction is charged on gross weight or on accepted weight after rejection. That one choice moves the payout by lakhs across a season.</div>`;
+  }
+};
+
+document.addEventListener('change', e=>{ if(e.target.id==='bf'){ billFarmer=e.target.value; redraw(); } });
+ACT.applyAdj = () => { DB.adj[billFarmer] = {other:num('ad-other'), comp:num('ad-comp')};
+  toast('Adjustment applied \u2014 net payable recalculated'); redraw(); };
+ACT.raiseBill = a => { const code = a.dataset.code || billFarmer;
+  DB.bills.push({code, status:'Pending approval'}); toast('Bill raised for approval'); redraw(); };
+ACT.approveBill = a => { const b = DB.bills.find(x=>x.code===a.dataset.code); b.status='Approved';
+  toast('Bill approved by area manager'); redraw(); };
+ACT.payBill = a => { const b = DB.bills.find(x=>x.code===a.dataset.code);
+  b.status='Paid'; b.advice=uid('PA'); b.utr='UTR'+Math.floor(1e11+Math.random()*8e11); b.acct='XXXXXX'+Math.floor(1000+Math.random()*9000); b.date='2026-04-14';
+  toast('Payment released \u00B7 advice '+b.advice); redraw(); };
+
+/* ========================= 11 DISPATCH TO PLANT ========================= */
+MOD.dispatch = {
+  desc:'Move stored potato from the cold store to a Balaji plant. Quality is checked against the plant specification before anything moves, the dispatch is approved, and the challan carries the LR, vehicle and driver detail the plant gate will ask for.',
+  tabs:['Pre-dispatch QC','Dispatch approval','Challan & LR','Plant gate receipt'],
+  render(t){
+    const inStore = DB.lots.filter(l=>l.status==='In store' && remB(l)>0);
+    if(t===0){
+      const rows = DB.lots.map(l=>{const q=l.qc,tp=tpod(q);
+        const fails = [];
+        if(tp>CFG.plantSpec.tpod) fails.push('TPOD');
+        if(q.uc>CFG.plantSpec.uc) fails.push('UC');
+        if(q.greening>CFG.plantSpec.greening) fails.push('Greening');
+        if(q.undersize>CFG.plantSpec.undersize) fails.push('Undersize');
+        if(q.solid<CFG.plantSpec.solidMin) fails.push('Solid %');
+        return `<tr><td>${lotChip(l.id)}</td><td>${store(l.store).name.split(',')[0]}</td><td>${l.variety}</td>
+          <td class="num">${remB(l).toLocaleString('en-IN')}</td>
+          <td class="num">${qcFlag(q.uc,CFG.plantSpec.uc)}${N(q.uc,1)}</td>
+          <td class="num">${qcFlag(tp,CFG.plantSpec.tpod)}${N(tp,1)}</td>
+          <td class="num">${q.solid<CFG.plantSpec.solidMin?'<span class="flag f-stop"></span>':'<span class="flag f-ok"></span>'}${N(q.solid,1)}</td>
+          <td class="num">${qcFlag(q.greening,CFG.plantSpec.greening)}${N(q.greening,1)}</td>
+          <td class="num">${qcFlag(q.undersize,CFG.plantSpec.undersize)}${N(q.undersize,1)}</td>
+          <td>${fails.length?`<span class="tag t-stop">Fails ${fails.join(', ')}</span>`:'<span class="tag t-ok">Meets spec</span>'}</td></tr>`;}).join('');
+      return `${panel('Plant specification', `<div class="pill-row">
+        ${[['TPOD','\u2264 '+CFG.plantSpec.tpod+'%'],['UC','\u2264 '+CFG.plantSpec.uc+'%'],['Greening','\u2264 '+CFG.plantSpec.greening+'%'],
+           ['Undersize','\u2264 '+CFG.plantSpec.undersize+'%'],['Solid','\u2265 '+CFG.plantSpec.solidMin+'%'],['CIPC','Applied, window open']]
+          .map(p=>`<span class="tag t-info">${p[0]} ${p[1]}</span>`).join('')}</div>`)}
+      ${panel('Lot quality against spec', table(
+        [{t:'Lot'},{t:'Store'},{t:'Variety'},{t:'Bags',n:1},{t:'UC',n:1},{t:'TPOD',n:1},{t:'Solid %',n:1},{t:'Greening',n:1},{t:'Undersize',n:1},{t:'Verdict'}],[rows]),
+        'Quality read from Cropin \u00B7 spec held in MAMSYS',true)}
+      <div class="note">A failing lot is not automatically rejected — it is referred. Balaji's plant may still take it against a blend or a price adjustment, so build the override as an approval with a reason, not as a hard block.</div>`;
+    }
+
+    if(t===1){
+      const aw = DB.transRates.filter(r=>r.awarded);
+      const rows = DB.dispatches.map(d=>`<tr><td class="mono">${d.id}</td><td>${lotChip(d.lot)}</td>
+        <td>${d.plant}</td><td class="num">${d.bags.toLocaleString('en-IN')}</td><td class="num">${N(d.kg/1000,2)}</td>
+        <td>${d.transporter}</td><td class="num">${INR(freightPlant(d))}</td>
+        <td><span class="tag ${d.status==='Received'?'t-ok':d.status==='Dispatched'?'t-info':d.status==='Approved'?'t-info':'t-wait'}">${d.status}</span></td>
+        <td class="row-actions">
+          ${d.status==='Pending approval'?`<button class="btn sm" data-act="dspApprove" data-id="${d.id}">Approve</button>`:''}
+          ${d.status==='Approved'?`<button class="btn sm primary" data-act="dspSend" data-id="${d.id}">Generate challan</button>`:''}
+        </td></tr>`).join('');
+      return `${panel('Raise a dispatch', `<div class="fgrid">
+        <div class="field"><label>Lot</label><select id="dp-lot">${inStore.map(l=>`<option value="${l.id}">${l.id} \u00B7 ${l.variety} \u00B7 ${remB(l).toLocaleString('en-IN')} bags in store</option>`).join('')||'<option>No stock</option>'}</select></div>
+        <div class="field"><label>To plant</label><select id="dp-plant">${PLANTS.map(p=>`<option>${p}</option>`).join('')}</select></div>
+        <div class="field"><label>Bags</label><input type="number" id="dp-bags" value="1000" min="1"></div>
+        <div class="field"><label>Transporter</label><select id="dp-tr">${aw.map(r=>`<option value="${r.transporter}">${r.transporter}</option>`).join('')}</select></div>
+        <div class="field"><label>Vehicle</label><input id="dp-veh" value="GJ-08-AW-3390"></div>
+        <div class="field"><label>Driver</label><input id="dp-drv" value="Praveenbhai Chaudhary"></div>
+        <div class="field"><label>Driver mobile</label><input id="dp-mob" value="97250 88410"></div>
+        <div class="field" style="display:flex;align-items:flex-end"><button class="btn primary" data-act="dspNew" style="width:100%">Raise dispatch</button></div>
+      </div><div class="mini">Raising against a lot that fails spec is allowed, and is flagged for the approver.</div>`)}
+      ${panel('Dispatch register', table(
+        [{t:'Dispatch'},{t:'Lot'},{t:'Plant'},{t:'Bags',n:1},{t:'MT',n:1},{t:'Transporter'},{t:'Freight',n:1},{t:'Status'},{t:''}],[rows]),null,true)}`;
+    }
+
+    if(t===2){
+      const sent = DB.dispatches.filter(d=>d.status!=='Pending approval' && d.status!=='Approved');
+      if(!sent.length) return panel('Challan & LR','<div class="sub">No challan generated yet. Approve a dispatch and generate the challan.</div>');
+      return sent.map(d=>{const l=lot(d.lot);
+        return `<section class="panel"><div class="panel-h"><h3>Dispatch challan ${d.id}</h3>
+          <span class="hint mono">${d.lr}</span></div><div class="panel-b"><div class="grid g4">
+          <div><div class="mini">FROM</div><div>${store(d.store).name}</div></div>
+          <div><div class="mini">TO PLANT</div><div>Balaji Wafers \u00B7 ${d.plant}</div></div>
+          <div><div class="mini">LOT BARCODE</div><div>${lotChip(d.lot)}</div></div>
+          <div><div class="mini">DISPATCH DATE</div><div>${dmy(d.date)}</div></div>
+          <div><div class="mini">VARIETY</div><div>${l?l.variety:'\u2014'}</div></div>
+          <div><div class="mini">BAGS</div><div class="mono">${d.bags.toLocaleString('en-IN')}</div></div>
+          <div><div class="mini">NET WEIGHT</div><div class="mono">${N(d.kg/1000,3)} MT</div></div>
+          <div><div class="mini">LR NUMBER</div><div class="mono">${d.lr}</div></div>
+          <div><div class="mini">TRANSPORTER</div><div>${d.transporter}</div></div>
+          <div><div class="mini">VEHICLE</div><div class="mono">${d.veh}</div></div>
+          <div><div class="mini">DRIVER</div><div>${d.driver}</div></div>
+          <div><div class="mini">DRIVER CONTACT</div><div class="mono">${d.mob}</div></div>
+          <div><div class="mini">FREIGHT</div><div class="mono">${INR(freightPlant(d))}</div></div>
+          <div><div class="mini">STATUS</div><div><span class="tag ${d.status==='Received'?'t-ok':'t-info'}">${d.status}</span></div></div>
+          ${d.recvKg?`<div><div class="mini">RECEIVED AT PLANT</div><div class="mono">${N(d.recvKg/1000,3)} MT</div></div>
+          <div><div class="mini">TRANSIT SHORTAGE</div><div class="mono">${N((d.kg-d.recvKg)/1000,3)} MT</div></div>`:''}
+        </div></div></section>`;}).join('') +
+        `<div class="spec">Every field on this challan comes from the requirement sheet columns BD\u2013BF. Print it two-up — one copy travels with the driver, one stays at the cold store gate.</div>`;
+    }
+
+    const rows = DB.dispatches.map(d=>`<tr><td class="mono">${d.id}</td><td>${lotChip(d.lot)}</td><td>${d.plant}</td>
+      <td class="num">${N(d.kg/1000,3)}</td>
+      <td class="num">${d.recvKg?N(d.recvKg/1000,3):'\u2014'}</td>
+      <td class="num">${d.recvKg?N((d.kg-d.recvKg)/1000,3):'\u2014'}</td>
+      <td class="num">${d.exTpod?N(d.exTpod,1):'\u2014'}</td><td class="num">${d.waste?N(d.waste,1):'\u2014'}</td>
+      <td>${d.status==='Dispatched'?`<button class="btn sm primary" data-act="gateIn" data-id="${d.id}">Record gate receipt</button>`:`<span class="tag t-ok">Received</span>`}</td></tr>`).join('');
+    return `${panel('Plant gate receipt', table(
+      [{t:'Dispatch'},{t:'Lot'},{t:'Plant'},{t:'Dispatched MT',n:1},{t:'Received MT',n:1},{t:'Shortage MT',n:1},{t:'Ex-fryer TPOD',n:1},{t:'FP waste %',n:1},{t:''}],[rows]),
+      'Sheet columns AX\u2013AZ \u00B7 plant level monitoring',true)}
+    <div class="note"><b>This is the loop closing.</b> Ex-fryer TPOD and FP waste at the plant are the only honest test of the quality call made at the cold store. Feed both back to the intake QC screen — if they diverge lot after lot, the sampling method at intake needs fixing, not the farmer's bill.</div>`;
+  }
+};
+
+ACT.dspNew = () => {
+  const l = lot(val('dp-lot')); if(!l) return toast('No stock available');
+  const bags = num('dp-bags');
+  if(bags<=0 || bags>remB(l)) return toast(`Only ${remB(l).toLocaleString('en-IN')} bags of this lot are in store`);
+  DB.dispatches.push({id:uid('DSP'), lot:l.id, plant:val('dp-plant'), store:l.store, bags,
+    kg:bags*CFG.bagKg, date:'2026-04-16', transporter:val('dp-tr'), veh:val('dp-veh'),
+    driver:val('dp-drv'), mob:val('dp-mob'), lr:null, status:'Pending approval', recvKg:0});
+  toast('Dispatch raised, waiting for approval'); redraw();
+};
+ACT.dspApprove = a => { const d = DB.dispatches.find(x=>x.id===a.dataset.id); d.status='Approved';
+  toast('Dispatch approved'); redraw(); };
+ACT.dspSend = a => {
+  const d = DB.dispatches.find(x=>x.id===a.dataset.id);
+  d.lr = 'LR-'+Math.floor(70000+Math.random()*9000); d.status='Dispatched';
+  const l = lot(d.lot);
+  l.out = (l.out||0) + d.bags;
+  if(remB(l)<=0) l.status='Dispatched';
+  toast('Challan generated \u00B7 '+d.lr); go('dispatch',2);
+};
+ACT.gateIn = a => { const d = DB.dispatches.find(x=>x.id===a.dataset.id);
+  d.recvKg = Math.round(d.kg*(1-(0.002+Math.random()*0.004)));
+  d.exTpod = +(4+Math.random()*6).toFixed(1); d.waste = +(2+Math.random()*3).toFixed(1);
+  d.status='Received'; toast('Gate receipt recorded at '+d.plant+' plant'); redraw(); };
+
+/* ====================== 12 ACCOUNTING & INVENTORY ====================== */
+MOD.accounts = {
+  desc:'Seven cost heads from the requirement sheet, rolled into one number that matters — what a metric tonne of potato costs Balaji by the time it reaches the plant gate. Inventory sits alongside it because stock and cost move together.',
+  tabs:['Cost build-up','Inventory','Payables','Season dashboard'],
+  render(t){
+    const C = costHeads();
+    if(t===0){
+      const rows = C.rows.map(r=>`<tr><td class="mono">${r.no}</td><td><b>${r.head}</b><div class="sub">${r.n}</div></td>
+        <td class="num">${INR(r.amt)}</td><td class="num">${INR(r.amt/C.mt)}</td>
+        <td class="num">${N(r.amt/C.total*100,1)}%</td>
+        <td><div style="background:var(--line-soft);height:6px;border-radius:3px;overflow:hidden;min-width:70px">
+          <div style="width:${r.amt/C.total*100}%;height:100%;background:${r.no===1?'var(--mesh)':'var(--steel)'}"></div></div></td></tr>`).join('');
+      return `${kpis([
+        {k:'Potato received', v:N(C.mt,1), u:'MT'},
+        {k:'Total season cost', v:INR(C.total)},
+        {k:'Landed cost', v:INR(C.perMT), u:'/MT', hi:true, n:'At plant gate'},
+        {k:'Cost above buy-back', v:N((C.perMT/RATE['Chipsona-3']-1)*100,1), u:'%', n:'Over the Chipsona-3 contract rate'}
+      ])}
+      ${panel('Cost build-up by head', table(
+        [{t:'#'},{t:'Head'},{t:'Season amount',n:1},{t:'Per MT',n:1},{t:'Share',n:1},{t:''}],[rows],
+        `<tr><td></td><td>Total landed cost</td><td class="num">${INR(C.total)}</td><td class="num">${INR(C.perMT)}</td><td class="num">100%</td><td></td></tr>`),
+        'Heads 1\u20137 as listed in sheet columns BG\u2013BH',true)}
+      <div class="note"><b>Read this the way a procurement head reads it.</b> The buy-back rate is what the farmer is quoted; landed cost is what the potato actually costs. The gap is bags, freight, rent, CIPC and shrinkage — all of it generated by the four modules to the left of this one, which is exactly why they belong in one platform.</div>`;
+    }
+
+    if(t===1){
+      const st = lenoStock();
+      const pot = STORES.map(s=>{
+        const ls = DB.lots.filter(l=>l.store===s.id);
+        const inB = ls.reduce((a,l)=>a+l.bags,0);
+        const out = ls.reduce((a,l)=>a+(l.out||0),0);
+        const on  = inB-out;
+        return `<tr><td class="txt">${s.name}</td><td class="num">${ls.length}</td>
+          <td class="num">${inB.toLocaleString('en-IN')}</td><td class="num">${out.toLocaleString('en-IN')}</td>
+          <td class="num">${on.toLocaleString('en-IN')}</td><td class="num">${N(on*CFG.bagKg/1000,1)}</td>
+          <td class="num">${N(inB/s.cap*100,0)}%</td><td class="num">${INR(inB*s.rent)}</td></tr>`;}).join('');
+      const lotRows = DB.lots.map(l=>`<tr><td>${lotChip(l.id)}</td><td class="txt">${fmr(l.code).name}</td>
+        <td class="txt">${l.variety}</td><td class="txt">${store(l.store).name.split(',')[0]}</td>
+        <td class="num">${remB(l).toLocaleString('en-IN')}</td><td class="num">${N(remKg(l)/1000,3)}</td>
+        <td class="txt"><span class="tag ${l.status==='In store'?'t-info':'t-mute'}">${l.status}</span></td></tr>`).join('');
+      const cipcTot = DB.cipc.reduce((s,c)=>s+c.litres,0);
+      return `${kpis([
+        {k:'Potato in store', v:N(DB.lots.reduce((s,l)=>s+remKg(l),0)/1000,1), u:'MT'},
+        {k:'Leno bags on hand', v:st.closing.toLocaleString('en-IN')},
+        {k:'CIPC applied', v:cipcTot, u:'L', n:'Across three stores'},
+        {k:'Dispatched to plants', v:N(DB.dispatches.reduce((s,d)=>s+d.kg,0)/1000,1), u:'MT'}
+      ])}
+      ${panel('Potato stock by cold store', `<table class="ledger"><thead><tr>
+        <th>Store</th><th class="num">Lots</th><th class="num">Bags in</th><th class="num">Bags out</th><th class="num">On hand</th>
+        <th class="num">MT</th><th class="num">Capacity used</th><th class="num">Rent accrued</th></tr></thead><tbody>${pot}</tbody></table>`,null,true)}
+      <div class="split">
+        ${panel('Lot register', `<table class="ledger"><thead><tr><th>Lot</th><th>Farmer</th><th>Variety</th><th>Store</th>
+          <th class="num">Bags</th><th class="num">MT</th><th>Status</th></tr></thead><tbody>${lotRows}</tbody></table>`,null,true)}
+        ${panel('Consumables', `<table class="ledger"><thead><tr><th>Item</th><th class="num">In</th><th class="num">Out</th><th class="num">Balance</th></tr></thead><tbody>
+          <tr><td class="txt">Leno bags, 50 kg</td><td class="num">${st.rec.toLocaleString('en-IN')}</td><td class="num">${(st.iss-st.ret).toLocaleString('en-IN')}</td><td class="num">${st.closing.toLocaleString('en-IN')}</td></tr>
+          <tr><td class="txt">CIPC, litres</td><td class="num">60</td><td class="num">${cipcTot}</td><td class="num">${60-cipcTot}</td></tr>
+          </tbody></table>`,null,true)}
+      </div>`;
+    }
+
+    if(t===2){
+      const bills = allBills();
+      const farmerDue = bills.filter(b=>b.status!=='Paid').reduce((s,b)=>s+b.net,0);
+      const frDue = DB.trips.filter(t=>t.status==='Unloaded' && !DB.freightBills.find(f=>f.trip===t.id)).reduce((s,t)=>s+freightField(t),0)
+                  + DB.dispatches.reduce((s,d)=>s+freightPlant(d),0);
+      const rentDue = DB.lots.reduce((s,l)=>s+l.bags*store(l.store).rent,0);
+      const vendDue = DB.lenoGRNs.reduce((s,g)=>s+g.bags*g.rate,0);
+      const rows = [
+        ['Farmers', bills.filter(b=>b.status!=='Paid').length+' open bills', farmerDue, 'On approval, 7 days'],
+        ['Transporters', 'Field and plant legs', frDue, 'Monthly, 30 days'],
+        ['Cold stores', DB.lots.length+' lots stored', rentDue, 'Season end'],
+        ['Leno bag vendor', DB.lenoGRNs.length+' receipts', vendDue, DB.lenoQuotes.find(q=>q.id===DB.lenoAward).credit]
+      ].map(r=>`<tr><td><b>${r[0]}</b></td><td class="sub">${r[1]}</td><td class="num"><b>${INR(r[2])}</b></td><td class="sub">${r[3]}</td></tr>`).join('');
+      return `${panel('Open payables', table([{t:'Party'},{t:'Against'},{t:'Amount',n:1},{t:'Terms'}],[rows],
+        `<tr><td colspan="2">Total open</td><td class="num">${INR(farmerDue+frDue+rentDue+vendDue)}</td><td></td></tr>`),
+        'Ageing and the bank file sit behind this screen',true)}
+      <div class="spec"><b>Build note.</b> Farmer payables are the only ones with a social cost attached. Give them their own ageing view and their own escalation, separate from vendor payables — a transporter waits, a farmer does not.</div>`;
+    }
+
+    const bills = allBills();
+    const paid = bills.filter(b=>b.status==='Paid').length;
+    const maxHead = Math.max(...C.rows.map(r=>r.amt));
+    return `${kpis([
+      {k:'Contracted acres', v:FARMERS.reduce((s,f)=>s+f.acres,0)},
+      {k:'Received', v:N(C.mt,1), u:'MT'},
+      {k:'Landed cost', v:INR(C.perMT), u:'/MT', hi:true},
+      {k:'Bills settled', v:paid+' of '+bills.length},
+      {k:'Stock at plants', v:N(DB.dispatches.reduce((s,d)=>s+(d.recvKg||0),0)/1000,1), u:'MT'}
+    ])}
+    <div class="split">
+      ${panel('Where the money goes', `<div class="stack">${C.rows.map(r=>`
+        <div><div style="display:flex;justify-content:space-between;font-size:12px"><span>${r.head}</span>
+          <span class="mono">${INR(r.amt/C.mt)}/MT</span></div>
+          <div style="background:var(--line-soft);height:9px;border-radius:2px;overflow:hidden;margin-top:3px">
+            <div style="width:${r.amt/maxHead*100}%;height:100%;background:${r.no===1?'var(--mesh)':r.no===2?'var(--steel)':'var(--chip)'}"></div>
+          </div></div>`).join('')}</div>`)}
+      ${panel('Season at a glance', `
+        <div class="kv"><span class="k">Farmers under contract</span><span class="v">${FARMERS.length}</span></div>
+        <div class="kv"><span class="k">Lots created</span><span class="v">${DB.lots.length}</span></div>
+        <div class="kv"><span class="k">Trips run</span><span class="v">${DB.trips.length}</span></div>
+        <div class="kv"><span class="k">Leno bags issued</span><span class="v">${lenoStock().iss.toLocaleString('en-IN')}</span></div>
+        <div class="kv"><span class="k">Bags unaccounted with farmers</span><span class="v">${FARMERS.reduce((s,f)=>s+Math.max(0,lenoBalance(f.code).open),0).toLocaleString('en-IN')}</span></div>
+        <div class="kv"><span class="k">Dispatches to plant</span><span class="v">${DB.dispatches.length}</span></div>
+        <div class="kv"><span class="k">Average TPOD across lots</span><span class="v">${N(DB.lots.reduce((s,l)=>s+tpod(l.qc),0)/DB.lots.length,1)}%</span></div>
+        <div class="rule"></div>
+        <div class="mini">LANDED COST PER MT AT PLANT GATE</div>
+        <div class="big-money">${INR(C.perMT)}</div>
+        <div class="sub">Against an average buy-back of ${INR(bills.reduce((s,b)=>s+b.gross,0)/bills.reduce((s,b)=>s+b.mt,0))} per MT</div>`)}
+    </div>`;
+  }
+};
+
+/* =========================== LOT PASSPORT ============================== */
+function openLot(id){
+  const l = lot(id) || DB.lots.find(x=>x.id===id);
+  const d = DB.dispatches.find(x=>x.lot===id);
+  if(!l && !d) return;
+  const code = l ? l.code : null;
+  const f = code ? fmr(code) : null;
+  const tr = DB.trips.find(x=>x.lot===id);
+  const b = code ? buildBill(code) : null;
+  const rent = l ? l.bags*store(l.store).rent : 0;
+  const fr   = tr ? freightField(tr) : 0;
+  const step = (cls,st,v,sd)=>`<div class="step ${cls}"><div class="st">${st}</div><div class="sv">${v}</div>${sd?`<div class="sd">${sd}</div>`:''}</div>`;
+  $('#dr-title').textContent = id;
+  $('#dr-sub').textContent = l ? `${l.variety} \u00B7 ${store(l.store).name}` : '';
+  $('#dr-body').innerHTML = `
+    ${l?`<div class="kv"><span class="k">Intake / in store</span><span class="v">${l.bags.toLocaleString('en-IN')} / ${remB(l).toLocaleString('en-IN')} bags</span></div>
+    <div class="kv"><span class="k">Weight at intake</span><span class="v">${N(l.kg/1000,3)} MT</span></div>
+    <div class="kv"><span class="k">TPOD / Solid</span><span class="v">${N(tpod(l.qc),1)}% / ${N(l.qc.solid,1)}%</span></div>
+    <div class="kv"><span class="k">Cold rent accrued</span><span class="v">${INR(rent)}</span></div>
+    <div class="rule"></div>`:''}
+    ${f?step('done','Stage 02 \u00B7 Cropin', f.name, `${f.village} \u00B7 ${f.acres} acres \u00B7 ${f.variety}`):''}
+    ${f?step('own','Stage 06 \u00B7 MAMSYS', `${lenoBalance(f.code).issued.toLocaleString('en-IN')} leno bags issued`,
+        `${lenoBalance(f.code).open.toLocaleString('en-IN')} unaccounted \u00B7 ${INR(Math.max(0,lenoBalance(f.code).open)*CFG.lenoRate)} recoverable`):''}
+    ${tr?step('own','Stage 07 \u00B7 MAMSYS', `${tr.veh} \u00B7 ${tr.transporter}`,
+        `${tr.driver} \u00B7 ${N((tr.recvKg||tr.loadKg)/1000,2)} MT \u00B7 freight ${INR(fr)}`):''}
+    ${l?step('done','Stage 08 \u00B7 Cropin', `Intake ${dmy(l.date)}`, `${store(l.store).name} \u00B7 barcode issued`):''}
+    ${b?step('own','Stage 10 \u00B7 MAMSYS', `Farmer bill ${INR(b.net)} net`,
+        `Gross ${INR(b.gross)} less ${INR(b.dedT)} \u00B7 ${b.status}`):''}
+    ${d?step('own','Stage 11 \u00B7 MAMSYS', `${d.bags.toLocaleString('en-IN')} bags to ${d.plant}`,
+        `${d.lr||'Challan pending'} \u00B7 freight ${INR(freightPlant(d))} \u00B7 ${d.status}`)
+      :step('','Stage 11 \u00B7 MAMSYS','Not yet dispatched','Lot available in store')}
+    ${l&&b?step('own','Stage 12 \u00B7 MAMSYS', `Cost attributable ${INR(l.kg/1000*(b.net/b.mt)+fr+rent+l.kg/1000*CFG.cipcPerMT)}`,
+        `Potato ${INR(l.kg/1000*(b.net/b.mt))} \u00B7 freight ${INR(fr)} \u00B7 rent ${INR(rent)} \u00B7 CIPC ${INR(l.kg/1000*CFG.cipcPerMT)}`):''}`;
+  $('#drawer').classList.add('on'); $('#scrim').classList.add('on');
+}
+function closeLot(){ $('#drawer').classList.remove('on'); $('#scrim').classList.remove('on'); }
+$('#dr-close').addEventListener('click', closeLot);
+$('#scrim').addEventListener('click', closeLot);
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeLot(); });
+
+/* ================================ init ================================= */
+$('#mm-acres').textContent = FARMERS.reduce((s,f)=>s+f.acres,0)+' acres · '+FARMERS.length+' farmers';
+renderRail();
+go('scope');
+
+</script>
+</body>
+</html>
